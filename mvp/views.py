@@ -24,22 +24,21 @@ def display( request ):
 
     # create student
     user = User.objects.get( username="ilyakh" )
-
-    student = Student(
-        user=user
-    )
+    student = Student( user=user )
     student.save()
 
     # create wish
     wish = Wish( student=student )
     wish.save()
 
+    # generate tag objects
+
     for t in tags:
-        tag = Tag( name=t )
-        tag.save()
-        wish.tags.add( tag )
+        candidate = Tag.objects.get_or_create(keyword=t)[0]
+        wish.tags.add(candidate)
         wish.save()
 
+    # fetch data from the database
     tags = [(w.student, w.tags.all()) for w in Wish.objects.all()]
 
     return render_to_response( "main.html", {

@@ -35,20 +35,17 @@ class Group(models.Model):
     students = models.ManyToManyField( Student, null=True )
     oracle   = models.OneToOneField( Oracle, null=True ) # !
 
-    def __unicode__(self):
-        return ",".join(self.tags)
-
 
 class Tag(models.Model):
     """Tag
     A keyword that describes a certain expertise,
     either possessed by an Oracle or required by a Student.
     """
-    name = models.CharField( max_length=MAX_TAG_LENGTH, unique=True, null=True )
-    subject = models.ForeignKey( "Subject" , null=True)
+    keyword = models.CharField( max_length=MAX_TAG_LENGTH, unique=True, null=True )
+    subject = models.ForeignKey( "Subject" , null=True ) # choice
 
     def __unicode__(self):
-        return self.name
+        return self.keyword
 
 
 class Subject(models.Model):
@@ -58,9 +55,9 @@ class Subject(models.Model):
 
     name = models.CharField( max_length=MAX_SUBJECT_NAME_LENGTH, unique=True, null=True )
 
-    def __unicode__(self):
-        return self.name
-
+class Concept( models.Model ):
+    """ A concept that contains more than just one word. Possible replacement for Tag-class """
+    concept = models.CharField( max_length=255, unique=True, null=True )
 
 class Wish(models.Model):
     """
