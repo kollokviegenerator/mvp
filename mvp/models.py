@@ -30,7 +30,7 @@ class Group(models.Model):
     """Group
     Student container.
     Requires assistance from an Oracle.
-    """
+"""
     tags     = models.ManyToManyField( "Tag",  )
     students = models.ManyToManyField( Student, null=True )
     oracle   = models.OneToOneField( Oracle, null=True ) # !

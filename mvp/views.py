@@ -9,6 +9,7 @@ from mvp.models import Wish, Student, Tag
 
 @csrf_protect
 def main( request ):
+
     return render_to_response( "main.html", {
             "title": "Test",
         },
