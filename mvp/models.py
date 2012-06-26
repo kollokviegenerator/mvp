@@ -18,7 +18,6 @@ class Student(Person):
     """Student
     Participates in group collaboration.
     """
-    pass
 
 class Oracle(Person):
     """Oracle
@@ -46,6 +45,7 @@ class Tag(models.Model):
     either possessed by an Oracle or required by a Student.
     """
     name = models.CharField( max_length=MAX_TAG_LENGTH, unique=True, null=True )
+    subject = models.ForeignKey( "Subject" , null=True)
 
     def __unicode__(self):
         return self.name
@@ -65,6 +65,5 @@ class Subject(models.Model):
 class Wish(models.Model):
     """
     """
-    # student = models.ForeignKey(Student)
-    username = models.CharField(max_length=12)
+    student = models.ForeignKey(Student, null=True)
     tags = models.ManyToManyField(Tag)

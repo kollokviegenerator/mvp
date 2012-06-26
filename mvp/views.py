@@ -1,5 +1,6 @@
 # Create your views here.
 from django.contrib.auth.models import User
+from django.db.utils import IntegrityError
 from django.shortcuts import render_to_response
 from django.core.context_processors import csrf;
 from django.template.context import RequestContext
@@ -17,23 +18,29 @@ def main( request ):
 @csrf_protect
 def display( request ):
 
-    username = "ilyakh"
-
+    # fetch tags
     tags = request.POST["tags"]
     tags = tags.split(",")
 
-    # creates a wish object
-    wish = Wish( username=username )
+    # create student
+    user = User.objects.get( username="ilyakh" )
+
+    student = Student(
+        user=user
+    )
+    student.save()
+
+    # create wish
+    wish = Wish( student=student )
     wish.save()
 
-    # add each tag to a ManyToMany field
     for t in tags:
-        if not None:
-            wish.tags.add( Tag(name=t) )
+        tag = Tag( name=t )
+        tag.save()
+        wish.tags.add( tag )
+        wish.save()
 
-    wish.save()
-
-    tags = Wish.objects.all()
+    tags = [(w.student, w.tags.all()) for w in Wish.objects.all()]
 
     return render_to_response( "main.html", {
             "title": "Test",
@@ -41,3 +48,16 @@ def display( request ):
         },
         context_instance = RequestContext( request )
     );
+
+@csrf_protect
+def flush( request ):
+
+    Tag.objects.all().delete()
+    Student.objects.all().delete()
+    Wish.objects.all().delete()
+
+    return render_to_response( "main.html", {
+            "title": "Flush entries"
+        },
+        context_instance = RequestContext( request )
+    )

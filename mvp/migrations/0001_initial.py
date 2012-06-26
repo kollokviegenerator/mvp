@@ -48,16 +48,32 @@ class Migration(SchemaMigration):
         # Adding model 'Tag'
         db.create_table('mvp_tag', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50, unique=True, null=True)),
+            ('subject', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mvp.Subject'], null=True)),
         ))
         db.send_create_signal('mvp', ['Tag'])
 
         # Adding model 'Subject'
         db.create_table('mvp_subject', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=11)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=11, unique=True, null=True)),
         ))
         db.send_create_signal('mvp', ['Subject'])
+
+        # Adding model 'Wish'
+        db.create_table('mvp_wish', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('username', self.gf('django.db.models.fields.CharField')(max_length=12)),
+        ))
+        db.send_create_signal('mvp', ['Wish'])
+
+        # Adding M2M table for field tags on 'Wish'
+        db.create_table('mvp_wish_tags', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('wish', models.ForeignKey(orm['mvp.wish'], null=False)),
+            ('tag', models.ForeignKey(orm['mvp.tag'], null=False))
+        ))
+        db.create_unique('mvp_wish_tags', ['wish_id', 'tag_id'])
 
 
     def backwards(self, orm):
@@ -81,6 +97,12 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Subject'
         db.delete_table('mvp_subject')
+
+        # Deleting model 'Wish'
+        db.delete_table('mvp_wish')
+
+        # Removing M2M table for field tags on 'Wish'
+        db.delete_table('mvp_wish_tags')
 
 
     models = {
@@ -140,12 +162,19 @@ class Migration(SchemaMigration):
         'mvp.subject': {
             'Meta': {'object_name': 'Subject'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '11'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '11', 'unique': 'True', 'null': 'True'})
         },
         'mvp.tag': {
             'Meta': {'object_name': 'Tag'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'unique': 'True', 'null': 'True'}),
+            'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['mvp.Subject']", 'null': 'True'})
+        },
+        'mvp.wish': {
+            'Meta': {'object_name': 'Wish'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['mvp.Tag']", 'symmetrical': 'False'}),
+            'username': ('django.db.models.fields.CharField', [], {'max_length': '12'})
         }
     }
 
