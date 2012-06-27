@@ -1,9 +1,9 @@
 {% include "header.html" %}
 
 <form method="post" action="/display/">{% csrf_token %}
-    <div>
-        <div class="element"><textarea class="tags" name="tags"></textarea></div>
-        <div class="element"><input type="submit" value="Submit" /></div>
+    <div class="">
+        <textarea class="tags" name="tags"></textarea>
+        <input type="submit" value="Submit" />
     </div>
 </form>
 

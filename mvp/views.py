@@ -44,11 +44,11 @@ def display( request ):
         wish.save()
 
     # fetch data from the database
-    tags = [(w.student, w.tags.all()) for w in Wish.objects.all()]
+    wishes = [w for w in Wish.objects.all()]
 
     return render_to_response( "display.html", {
             "title": "Test",
-            "tags": tags
+            "wishes": wishes
         },
         context_instance = RequestContext( request )
     );
