@@ -1,4 +1,5 @@
 body {
+    font-family: Arial, sans-serif;
     background-color: rgb( 212, 212, 212 );
     text-align: center;
 }
@@ -9,12 +10,43 @@ body {
     text-align: left;
     border: 0.5em solid rgba( 255, 255, 255, 0.5 );
     background-color: rgba( 255, 255, 255, 0.75 );
-    -moz-border-radius: 0.5em;
-    border-radius: 0.5em;
-}
+    -moz-border-radius: 0.3em;
+    border-radius: 0.3em;
 
-.listing {
-    .wish {
+    .listing {
+        .element {
+            padding: 0.5em;
+        }
+    }
+
+    .wish_form {
+        .tags {
+            width: 90%;
+            padding: 0.5em;
+            min-height: 10em;
+            font-size: 1.5em;
+            -moz-border-radius: 0.25em;
+            border-radius: 0.25em;
+            border-bottom-color: red;
+        }
+
+        .action {
+            width: 50%;
+        }
 
     }
 }
+
+.tag {
+    -moz-border-radius: 0.15em;
+    border-radius: 0.15em;
+    background-color: rgba( 0, 0, 0, 0.2 );
+    padding: 0.2em;
+}
+
+.student {
+    font-weight: bold;
+    text-decoration: underline;
+    margin-right: 0.5em;
+}
+

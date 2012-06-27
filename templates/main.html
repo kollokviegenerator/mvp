@@ -1,10 +1,8 @@
 {% include "header.html" %}
 
-<form method="post" action="/display/">{% csrf_token %}
-    <div class="">
-        <textarea class="tags" name="tags"></textarea>
-        <input type="submit" value="Submit" />
-    </div>
+<form class="wish_form" method="post" action="/display/">{% csrf_token %}
+    <textarea class="tags" name="tags"></textarea>
+    <input class="action" type="submit" value="Submit" />
 </form>
 
 {% include "footer.html" %}
