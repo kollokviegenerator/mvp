@@ -1,3 +1,5 @@
+import re
+
 # util
 
 def extract_tags( tag_string ):
@@ -6,7 +8,7 @@ def extract_tags( tag_string ):
     """
     output = []
     # splits the tag string into tokens
-    output = tag_string.split(",")
+    output = re.split( r',|\n', tag_string )
     # strips empty characters from each tag
     output = [t.strip() for t in output]
     # removes all empty-string from the remaining tags

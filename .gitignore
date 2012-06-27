@@ -1,5 +1,3 @@
 kgen/settings.py
-mvp/migrations/*.py
-mvp/migrations/*.pyc
-
-
+mvp/migrations/
+static/
