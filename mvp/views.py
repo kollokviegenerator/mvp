@@ -42,7 +42,7 @@ def display( request ):
     # fetch data from the database
     tags = [(w.student, w.tags.all()) for w in Wish.objects.all()]
 
-    return render_to_response( "main.html", {
+    return render_to_response( "display.html", {
             "title": "Test",
             "tags": tags
         },

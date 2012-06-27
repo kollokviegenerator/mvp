@@ -42,22 +42,10 @@ class Tag(models.Model):
     either possessed by an Oracle or required by a Student.
     """
     keyword = models.CharField( max_length=MAX_TAG_LENGTH, unique=True, null=True )
-    subject = models.ForeignKey( "Subject" , null=True ) # choice
 
     def __unicode__(self):
         return self.keyword
 
-
-class Subject(models.Model):
-    """Subject
-    A tag that specifies subject of the expertise.
-    """
-
-    name = models.CharField( max_length=MAX_SUBJECT_NAME_LENGTH, unique=True, null=True )
-
-class Concept( models.Model ):
-    """ A concept that contains more than just one word. Possible replacement for Tag-class """
-    concept = models.CharField( max_length=255, unique=True, null=True )
 
 class Wish(models.Model):
     """
