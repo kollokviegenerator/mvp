@@ -5,7 +5,7 @@ MAX_TAG_LENGTH = 50
 MAX_SUBJECT_NAME_LENGTH = 11
 
 class Person(models.Model):
-    """Generic Person"""
+    """ Generic Person """
     user = models.ForeignKey(User)
 
     class Meta:
@@ -15,29 +15,29 @@ class Person(models.Model):
         return self.user.username
 
 class Student(Person):
-    """Student
+    """ Student
     Participates in group collaboration.
     """
 
 class Oracle(Person):
-    """Oracle
+    """ Oracle
     Student with a certain expertise.
     Assigned to one or many groups.
     """
     pass
 
 class Group(models.Model):
-    """Group
+    """ Group
     Student container.
     Requires assistance from an Oracle.
-"""
+    """
     tags     = models.ManyToManyField( "Tag",  )
     students = models.ManyToManyField( Student, null=True )
     oracle   = models.OneToOneField( Oracle, null=True ) # !
 
 
 class Tag(models.Model):
-    """Tag
+    """ Tag
     A keyword that describes a certain expertise,
     either possessed by an Oracle or required by a Student.
     """

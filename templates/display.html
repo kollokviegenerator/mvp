@@ -1,10 +1,10 @@
 {% include "header.html" %}
 
-<ul>
+<div class="wish">
     {% for t in tags %}
-        <li>{{ t }}</li>
+        <div class="element">{{ t }}</div>
     {% endfor %}
-</ul>
+</div>
 
 {% include "footer.html" %}
 

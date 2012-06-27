@@ -7,6 +7,8 @@ from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_protect;
 from mvp.models import Wish, Student, Tag
 
+from controls import *
+
 @csrf_protect
 def main( request ):
 
@@ -20,8 +22,10 @@ def main( request ):
 def display( request ):
 
     # fetch tags
-    tags = request.POST["tags"]
-    tags = tags.split(",")
+    # tags = request.POST["tags"]
+    # tags = tags.split(",")
+
+    tags = extract_tags( request.POST["tags"] )
 
     # create student
     user = User.objects.get( username="ilyakh" )
