@@ -1,10 +1,10 @@
 # Create your views here.
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
-from django.shortcuts import render_to_response
-from django.core.context_processors import csrf;
+from django.shortcuts import render_to_response, redirect
+from django.core.context_processors import csrf
 from django.template.context import RequestContext
-from django.views.decorators.csrf import csrf_protect;
+from django.views.decorators.csrf import csrf_protect
 from mvp.models import Wish, Student, Tag
 
 from controls import *
@@ -18,9 +18,7 @@ def main( request ):
         context_instance = RequestContext( request )
     )
 
-@csrf_protect
-def display( request ):
-
+def add( request ):
     # fetch tags
     # tags = request.POST["tags"]
     # tags = tags.split(",")
@@ -42,6 +40,11 @@ def display( request ):
         wish.tags.add(candidate)
         wish.save()
 
+    return redirect( display )
+
+@csrf_protect
+def display( request ):
+
     # fetch data from the database
     wishes = [w for w in Wish.objects.all()]
 
@@ -56,6 +59,11 @@ def display( request ):
 def flush( request ):
 
     tables = [Tag, Student, Wish]
+
+    # import mvp
+    # from django.db import models
+    # print [model for model in mvp.models.__dict__]
+
     map( lambda x: x.objects.all().delete(), tables )
     table_names = ", ".join([ table.__name__ for table in tables ])
 
