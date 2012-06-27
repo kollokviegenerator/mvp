@@ -12,6 +12,7 @@ class Migration(SchemaMigration):
         db.create_table('mvp_student', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('test', self.gf('django.db.models.fields.CharField')(max_length=10)),
         ))
         db.send_create_signal('mvp', ['Student'])
 
@@ -48,22 +49,14 @@ class Migration(SchemaMigration):
         # Adding model 'Tag'
         db.create_table('mvp_tag', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50, unique=True, null=True)),
-            ('subject', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mvp.Subject'], null=True)),
+            ('keyword', self.gf('django.db.models.fields.CharField')(max_length=50, unique=True, null=True)),
         ))
         db.send_create_signal('mvp', ['Tag'])
-
-        # Adding model 'Subject'
-        db.create_table('mvp_subject', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=11, unique=True, null=True)),
-        ))
-        db.send_create_signal('mvp', ['Subject'])
 
         # Adding model 'Wish'
         db.create_table('mvp_wish', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('username', self.gf('django.db.models.fields.CharField')(max_length=12)),
+            ('student', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mvp.Student'], null=True)),
         ))
         db.send_create_signal('mvp', ['Wish'])
 
@@ -94,9 +87,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Tag'
         db.delete_table('mvp_tag')
-
-        # Deleting model 'Subject'
-        db.delete_table('mvp_subject')
 
         # Deleting model 'Wish'
         db.delete_table('mvp_wish')
@@ -157,24 +147,19 @@ class Migration(SchemaMigration):
         'mvp.student': {
             'Meta': {'object_name': 'Student'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'test': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
-        'mvp.subject': {
-            'Meta': {'object_name': 'Subject'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '11', 'unique': 'True', 'null': 'True'})
         },
         'mvp.tag': {
             'Meta': {'object_name': 'Tag'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'unique': 'True', 'null': 'True'}),
-            'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['mvp.Subject']", 'null': 'True'})
+            'keyword': ('django.db.models.fields.CharField', [], {'max_length': '50', 'unique': 'True', 'null': 'True'})
         },
         'mvp.wish': {
             'Meta': {'object_name': 'Wish'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['mvp.Tag']", 'symmetrical': 'False'}),
-            'username': ('django.db.models.fields.CharField', [], {'max_length': '12'})
+            'student': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['mvp.Student']", 'null': 'True'}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['mvp.Tag']", 'symmetrical': 'False'})
         }
     }
 

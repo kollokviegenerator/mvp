@@ -19,6 +19,8 @@ class Student(Person):
     Participates in group collaboration.
     """
 
+    test = models.CharField(max_length=10)
+
 class Oracle(Person):
     """ Oracle
     Student with a certain expertise.
