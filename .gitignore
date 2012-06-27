@@ -1,3 +1,9 @@
 kgen/settings.py
 mvp/migrations/
 static/
+.DS_Store
+*.pyc
+.*.swp
+.*.swo
+*~
+*.tmp
