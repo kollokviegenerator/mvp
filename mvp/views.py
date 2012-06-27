@@ -36,8 +36,7 @@ def display( request ):
     wish = Wish( student=student )
     wish.save()
 
-    # generate tag objects
-
+    # generate tag objects (fires off only if there are elements in tags)
     for t in tags:
         candidate = Tag.objects.get_or_create(keyword=t)[0]
         wish.tags.add(candidate)
@@ -56,12 +55,13 @@ def display( request ):
 @csrf_protect
 def flush( request ):
 
-    Tag.objects.all().delete()
-    Student.objects.all().delete()
-    Wish.objects.all().delete()
+    tables = [Tag, Student, Wish]
+    map( lambda x: x.objects.all().delete(), tables )
+    table_names = ", ".join([ table.__name__ for table in tables ])
 
-    return render_to_response( "main.html", {
-            "title": "Flush entries"
+    return render_to_response( "dialog.html", {
+            "title": "Flush entries",
+            "message": "The tables for %s has been flushed" % ( table_names )
         },
         context_instance = RequestContext( request )
     )
