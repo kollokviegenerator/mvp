@@ -18,8 +18,8 @@ class Student(Person):
     """ Student
     Participates in group collaboration.
     """
+    pass
 
-    test = models.CharField(max_length=10)
 
 class Oracle(Person):
     """ Oracle
