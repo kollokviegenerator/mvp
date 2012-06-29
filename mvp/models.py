@@ -43,7 +43,7 @@ class Tag(models.Model):
     A keyword that describes a certain expertise,
     either possessed by an Oracle or required by a Student.
     """
-    keyword = models.CharField( max_length=MAX_TAG_LENGTH, unique=True, null=True )
+    name_of_tag = models.CharField( max_length=MAX_TAG_LENGTH, unique=True, null=True )
 
     def __unicode__(self):
         return self.keyword

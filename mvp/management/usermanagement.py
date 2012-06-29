@@ -43,6 +43,21 @@ class UserManagement:
             any foreign keys to users won't break
             @param usr: the user to remove
         """
+        usr = usr.strip() #remove whitespace
+        try:
+            u = User.objects.get(username=usr)
+
+            print "user %s removed (is_active=False)" % usr
+#            transaction.commit()
+        except IntegrityError:
+            print "User '%s' exists in database." % usr
+#            transaction.rollback()
+            if not User.objects.get(username=usr).is_active:
+                print "If the user at some point was deleted "\
+                    "you want to do a user restore instead of add"
+
+#        finally:
+#            transaction.commit()
 
     def update(self, usr, *args):
         """

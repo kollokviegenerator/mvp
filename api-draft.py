@@ -102,10 +102,10 @@ if __name__ == "__main__":
     import os
     os.environ['DJANGO_SETTINGS_MODULE'] = 'kgen.settings'
 
-    from api.management.usermanagement import UserManagement
-    from api.management.tagmanagement import TagManagement
-    from api.management.groupmanagement import GroupManagement
-    from api.management.wishmanagement import WishManagement
+    from mvp.management.usermanagement import UserManagement
+    from mvp.management.tagmanagement import TagManagement
+    from mvp.management.groupmanagement import GroupManagement
+    from mvp.management.wishmanagement import WishManagement
 
     apidraft = apidraft()
     apidraft.main(sys.argv)
