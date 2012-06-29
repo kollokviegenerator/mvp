@@ -78,4 +78,4 @@ if __name__ == "__main__":
     if "y" in raw_input("Save WISHES to file? (y/n): "):
         with open( "./" + generator.path + "wishes.dat", "w" ) as out:
             for username,tags in wishes:
-                out.write( "%s\t%s\n" % (username,",".join(tags)) )
+                out.write( "%s %s\n" % (username," ".join(tags)) )

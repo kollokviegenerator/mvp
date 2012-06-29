@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_protect
+from django.contrib import auth
 from mvp.models import Wish, Student, Tag
 
 from controls import *
@@ -73,3 +74,26 @@ def flush( request ):
         },
         context_instance = RequestContext( request )
     )
+
+@csrf_protect
+def intrude( request, username ):
+
+    previous_username = request.user
+    auth.logout( request )
+    user = auth.authenticate( username=username, password="!" )
+
+    if user != None:
+        auth.login( request, candidate )
+
+        out = render_to_response( "dialog.html", {
+            "title": "Fast intrusion",
+            "message": "You were logged in as: %s, and now you are logged in as %s" % (previous_username, username)
+        } )
+
+    else:
+        out = render_to_response( "dialog.html", {
+            "title": "Fast intrusion failed",
+            "message": "You are still logged in as: %s, user %s was not authenticated" % (previous_username, username)
+        } )
+
+    return out;
