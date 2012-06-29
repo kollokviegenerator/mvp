@@ -6,7 +6,7 @@ MAX_SUBJECT_NAME_LENGTH = 11
 
 class Person(models.Model):
     """ Generic Person """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, unique=True)
 
     class Meta:
         abstract=True
@@ -37,6 +37,8 @@ class Group(models.Model):
     students = models.ManyToManyField( Student, null=True )
     oracle   = models.OneToOneField( Oracle, null=True ) # !
 
+    def __unicode__(self):
+        return "Group"
 
 class Tag(models.Model):
     """ Tag
@@ -46,11 +48,14 @@ class Tag(models.Model):
     name_of_tag = models.CharField( max_length=MAX_TAG_LENGTH, unique=True, null=True )
 
     def __unicode__(self):
-        return self.keyword
-
+        return self.name_of_tag
 
 class Wish(models.Model):
     """
     """
     student = models.ForeignKey(Student, null=True)
     tags = models.ManyToManyField(Tag)
+
+    def __unicode__(self):
+        return "Wish"
+
