@@ -2,17 +2,55 @@
 """
     The unifi command line interface
 """
-from mvp.models import Student, Oracle, Wish, Tag, Group
+from mvp.models import Tag
+from django.db.utils import IntegrityError
+from django.db import transaction
 
 class TagManagement:
-
     """
-        banana banana banana
+        Takes care of tag management (adding, removing, updating ...)
     """
     def __init__(self):
         pass
 
+    @transaction.commit_manually
     def addtag(self, tag):
-        print tag
+        """
+            Add a user
+            @param usr: the user to be added
+        """
+        tag = tag.strip() #remove whitespace
+        try:
+            Tag(name_of_tag=tag).save()
+            print "tag '%s' added!" % tag
+        except IntegrityError:
+            print "tag '%s' exists in database." % tag
+            transaction.rollback()
+        finally:
+            transaction.commit()
+
+    def deletetag(self, tag):
+        """
+            Delete a tag (or rather, set the is_active flag to False so
+            any foreign keys to users won't break
+            @param usr: the user to remove
+        """
+        pass
+#        tag = tag.strip() #remove whitespace
+#        try:
+#            u = User.objects.get(username=usr)
+#            u.is_active=False
+#            u.save()
+#
+#            print "user %s removed (is_active=False)" % usr
+#        except User.DoesNotExist:
+#            print "User '%s' does exists in database." % usr
 
 
+    def flush(self):
+        """
+            Removes all entries in the tag table (and not just is_active=False)
+        """
+
+        Tag.objects.all().delete()
+        print "Tag table flushed"

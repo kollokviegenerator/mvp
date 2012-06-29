@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from django.db import transaction
 
-
 class UserManagement:
 
     """
@@ -24,9 +23,8 @@ class UserManagement:
         """
         usr = usr.strip() #remove whitespace
         try:
-            User.objects.create_user(usr)
+            User.objects.create_user(usr, password="123")
             print "user %s added!" % usr
-#            transaction.commit()
         except IntegrityError:
             print "User '%s' exists in database." % usr
             transaction.rollback()
@@ -46,27 +44,49 @@ class UserManagement:
         usr = usr.strip() #remove whitespace
         try:
             u = User.objects.get(username=usr)
+            u.is_active=False
+            u.save()
 
             print "user %s removed (is_active=False)" % usr
-#            transaction.commit()
-        except IntegrityError:
-            print "User '%s' exists in database." % usr
-#            transaction.rollback()
-            if not User.objects.get(username=usr).is_active:
-                print "If the user at some point was deleted "\
-                    "you want to do a user restore instead of add"
+        except User.DoesNotExist:
+            print "User '%s' does not exists in database." % usr
 
-#        finally:
-#            transaction.commit()
-
-    def update(self, usr, *args):
+    @transaction.commit_manually
+    def updateuser(self, usr, arg):
         """
             Update an user
             @param usr: the user to update
-            @param: args: info to be updated
+            @param: arg: info to be updated
         """
 
-        pass
+        #o - oracle, s - student, r - restore (is_active = True)
+        if arg == None or arg[0] not in ['o', 's', 'r', 'student', 'oracle', 'restore']:
+            print "Argument must be of type 'o', 's', or 'r', 'student', 'oracle', 'restore'"
+            return
+
+        usr = usr.strip()
+
+        try:
+            u = User.objects.get(username=usr)
+        except User.DoesNotExist:
+            print "User '%s' does not exists in database." % usr
+            transaction.rollback()
+            return
+
+        if arg[0] == 's' or arg[0] == 'student':
+            s = Student(user=u)
+            s.save()
+            print "User %s is now registered as student." % usr
+        elif arg[0] == 'o' or arg[0] == 'oracle':
+            o = Oracle(user=u)
+            o.save()
+            print "User %s is now registered as oracle." % usr
+        else: #arg is now r
+            u.is_active = True
+            u.save()
+            print "User %s is now restored (is_active=True)." % usr
+
+        transaction.commit()
 
     def flush(self):
         """

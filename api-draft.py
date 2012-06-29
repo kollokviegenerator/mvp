@@ -8,6 +8,9 @@ class apidraft:
 
     def __init__(self):
         self.user_management = UserManagement()
+        self.tag_management = TagManagement()
+        self.group_management = GroupManagement()
+        self.wish_management = WishManagement()
 
     def main(self, argv):
         """
@@ -15,7 +18,8 @@ class apidraft:
         """
         try:
             opts, args = getopt.getopt(argv[1:],
-                "hu:g:", ["help", "adduser=", "du=", "deleteuser=", "flushusers"])
+                    "hu:g:t:w:", ["help", "adduser=", "du=", "uu=", "updateuser=", "deleteuser=", 
+                        "flushusers", "addtag=", "flushtags", "addwish=", "flushwishes"])
         except getopt.GetoptError, err:
             # print help information and exit:
             print str(err) # will print something like "option -f not recognized"
@@ -27,6 +31,8 @@ class apidraft:
             sys.exit(1)
 
         for o, a in opts:
+#            print o
+#            print a
             if o in ("-h", "--help"):
                 self.usage()
                 sys.exit()
@@ -34,10 +40,20 @@ class apidraft:
                 self.adduser(a)
             elif o in ("-g", "--addgroup"):
                 print "adding group dummy text"
-            elif o in("--du", "--deleteuser"):
+            elif o in ("--du", "--deleteuser"):
                 self.deleteuser(a)
-            elif o in("--flushusers"):
+            elif o in ("--flushusers"):
                 self.user_management.flush()
+            elif o in ("--uu", "--updateuser"):
+                self.updateuser(a, args)
+            elif o in ("-t", "--addtag"):
+                self.addtag(a)
+            elif o in ("--flushtags"):
+                self.tag_management.flush()
+            elif o in ("-w", "--addwish"):
+                self.addwish(a, args)
+            elif o in ("--flushwishes"):
+                self.wish_management.flushwishes()
             else:
                 assert False, "unhandled option"
 
@@ -73,6 +89,41 @@ class apidraft:
             self.user_management.deleteuser(in_user)
 
 
+    def updateuser(self, in_user, args):
+        """
+            Update a user
+            @param in_user: the user to update
+            @param args: the update arguments
+        """
+
+        try:
+            #argument is a file of users
+            f = open(in_user, 'r')
+            for usr in f:
+                self.user_management.updateuser(usr, args)
+        except IOError:
+                self.user_management.updateuser(in_user, args)
+
+    def addtag(self, in_tag):
+
+        """
+            Add a user to the database
+            @param in_user: the user to be added, can be a file or a single username
+        """
+        try:
+            #argument is a file of users
+            f = open(in_tag, 'r')
+            for tag in f:
+                self.tag_management.addtag(tag)
+
+            f.close()
+        except IOError:
+            #Argument is a single user
+            self.tag_management.addtag(in_tag)
+
+    def addwish(self, student, tags):
+        self.wish_management.addwish(student, tags)
+
     def usage(self):
         """
         Print usage
@@ -86,6 +137,7 @@ class apidraft:
         print "[user]"
         print "\t-u, \t--adduser \t<user>"
         print "\t--du, \t--deleteuser \t<user>"
+        print "\t--uu, \t--updateuser \t<user> <s/o/r>"
 
 
 if __name__ == "__main__":
