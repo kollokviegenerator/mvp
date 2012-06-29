@@ -58,7 +58,7 @@ body {
 .tag {
     -moz-border-radius: 0.15em;
     border-radius: 0.15em;
-    background-color: rgba( 0, 0, 0, 0.2 );
+    background-color: rgba( 0, 0, 0, 0.5 );
     padding: 0.2em 0.7em 0.2em 0.7em;
 }
 
@@ -68,4 +68,50 @@ body {
     text-decoration: underline;
     margin-right: 0.5em;
 }
+
+.tagger {
+    padding: 0.2em;
+    display: block;
+    overflow: auto;
+    border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+
+
+    .tag {
+        float: left;
+        clear: right;
+        padding: 0.5em 0.25em 0.5em 1em;
+        margin: 0.3em;
+        border: none;
+        background-color: rgba(255, 0, 0, 0.35);
+        border-radius: 0.5em;
+        -moz-border-radius: 0.5em;
+
+        .remove {
+            background-color: rgba( 0, 0, 0, 0.4 );
+            font-family: sans-serif;
+            color: white;
+            margin-left: 0.75em;
+            padding: 0.3em 0.5em 0.3em 0.5em;
+            border-radius: 0.2em;
+            -moz-border-radius: 0.2em;
+            cursor: pointer;
+        }
+
+    }
+
+    .tag_input {
+        float: left;
+        border: none;
+        width: auto;
+        padding: 0.5em;
+        font-size: 1.2em;
+        background-color: rgba( 255, 255, 255, 0 );
+        width: 90%;
+    }
+
+
+}
+
+
 
