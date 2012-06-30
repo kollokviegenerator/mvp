@@ -16,22 +16,39 @@ class WishManagement:
         pass
 
     @transaction.commit_manually
-    def addwish(self, student, *tags):
+    def addwish(self, student, tags):
         """
             Add a user
             @param usr: the user to be added
         """
 
-        print student
-#        try:
-#            s = Student.objects.get(user=User.objects.get(username=student))
-#            print s.__class__
-#        except User.DoesNotExist:
-#            print "Student '%s' does not exists in database." % student
-#            transaction.rollback()
-#            return
-#        finally:
-#            transaction.commit()
+        if not tags:
+            print "Please specify at least one tag"
+            return
+
+        student = student.strip()
+        try:
+            s = Student.objects.get(user=User.objects.get(username=student))
+
+            w = Wish()
+            w.student=s
+            w.save()
+            for t in tags:
+                try:
+                    t = Tag.objects.get(name_of_tag=t)
+                    w.tags.add(t)
+                except Tag.DoesNotExist:
+                    print "Tag %s does not exist" % t
+
+            print "Wish added"
+        except Student.DoesNotExist: #Can't find student
+            print "User '%s' is not registered as a student" % student
+            transaction.rollback()
+        except User.DoesNotExist: #Can't even find the user
+            print "Student '%s' does not exists in database." % student
+            transaction.rollback()
+        finally:
+            transaction.commit()
 
     def deletewish(self, usr):
         """

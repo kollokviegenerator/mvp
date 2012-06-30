@@ -46,7 +46,6 @@ class UserManagement:
             u = User.objects.get(username=usr)
             u.is_active=False
             u.save()
-
             print "user %s removed (is_active=False)" % usr
         except User.DoesNotExist:
             print "User '%s' does not exists in database." % usr
@@ -60,7 +59,7 @@ class UserManagement:
         """
 
         #o - oracle, s - student, r - restore (is_active = True)
-        if arg == None or arg[0] not in ['o', 's', 'r', 'student', 'oracle', 'restore']:
+        if not arg or arg[0] not in ['o', 's', 'r', 'student', 'oracle', 'restore']:
             print "Argument must be of type 'o', 's', or 'r', 'student', 'oracle', 'restore'"
             return
 

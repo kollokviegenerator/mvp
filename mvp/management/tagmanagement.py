@@ -36,16 +36,6 @@ class TagManagement:
             @param usr: the user to remove
         """
         pass
-#        tag = tag.strip() #remove whitespace
-#        try:
-#            u = User.objects.get(username=usr)
-#            u.is_active=False
-#            u.save()
-#
-#            print "user %s removed (is_active=False)" % usr
-#        except User.DoesNotExist:
-#            print "User '%s' does exists in database." % usr
-
 
     def flush(self):
         """

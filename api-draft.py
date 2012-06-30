@@ -1,5 +1,8 @@
 #!/usr/bin/env python2.7
 
+#TODO: implement group management
+#Remove print statements from the different managers?
+
 import getopt, sys
 
 """
@@ -33,15 +36,14 @@ class apidraft:
             sys.exit(1)
 
         for o, a in opts:
-#            print o
-#            print a
+
             if o in ("-h", "--help"):
                 self.usage()
                 sys.exit()
             elif o in ("-u", "--adduser"):
                 self.adduser(a)
             elif o in ("-g", "--addgroup"):
-                print "adding group dummy text"
+                print "Group management not implemented yet!"
             elif o in ("--du", "--deleteuser"):
                 self.deleteuser(a)
             elif o in ("--flushusers"):
@@ -55,7 +57,7 @@ class apidraft:
             elif o in ("-w", "--addwish"):
                 self.addwish(a, args)
             elif o in ("--flushwishes"):
-                self.wish_management.flushwishes()
+                self.wish_management.flush()
             else:
                 assert False, "unhandled option"
 
@@ -124,7 +126,21 @@ class apidraft:
             self.tag_management.addtag(in_tag)
 
     def addwish(self, student, tags):
-        self.wish_management.addwish(student, tags)
+
+        try:
+            #argument is a file of users
+            f = open(student, 'r')
+            for wishline in f:
+
+                wishline = wishline.strip().split()
+                studline = wishline[0]
+                tagsline = wishline[1:]
+                self.wish_management.addwish(studline, tagsline)
+
+            f.close()
+        except IOError:
+            #Argument is a single user
+            self.wish_management.addwish(student, tags)
 
     def usage(self):
         """
@@ -133,13 +149,27 @@ class apidraft:
 
         print "Usage: %s [subcommand] [args] \n" % sys.argv[0]
         print "Help:"
-        print "    -h --help \tto show this help and exit\n"
+        print "    -h --help\tto show this help and exit\n"
         print "Type '%s [subcommand] -h, --help for help on a specific subcommand (not impl. yet)\n"
         print "Available subcommands"
+
         print "[user]"
-        print "\t-u, \t--adduser \t<user>"
-        print "\t--du, \t--deleteuser \t<user>"
-        print "\t--uu, \t--updateuser \t<user> <s/o/r>"
+        print "\t-u,\t--adduser\t<user>"
+        print "\t--du,\t--deleteuser\t<user>"
+        print "\t--uu,\t--updateuser\t<user> <s/o/r>"
+        print "\t--flushusers\tflush user table\n"
+
+        print "[Tags]"
+        print "\t-t,\t--addtag\t<tag>"
+        print "\t--flushtags \tflush tag table\n"
+
+        print "[Wish]"
+        print "\t-w,\t--addwish\t<student> <tag(s)>"
+        print "\t--flushwishes\tflush wish table\n"
+
+        print "[Group]"
+        print "Group management not yet implemented"
+
 
 
 if __name__ == "__main__":
