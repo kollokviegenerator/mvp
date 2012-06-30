@@ -1,9 +1,8 @@
 import random
-from string import ascii_lowercase
-from mvp.management import *
+from string import ascii_lowercases
 
-# [/] Rewrite 'generate_users', 'generate_tags with yield and generators
-# [!] in command-line mode, generates a single wish PER USER
+# [!] in command-line mode, generates a single wish PER USER,
+# but allows random duplicate usernames
 
 class TestDataGenerator:
 
@@ -14,6 +13,7 @@ class TestDataGenerator:
 
     def generate_users(self, quantity):
         output = []
+        minimum_length_factor = 0.7
 
         def make_username(length):
             n = len(ascii_lowercase)
@@ -22,7 +22,7 @@ class TestDataGenerator:
 
         for i in range(quantity):
             username_length = random.randint(
-                int(self.username_length * 0.7),
+                int(self.username_length * minimum_length_factor),
                 self.username_length
             )
             output.append(
@@ -33,6 +33,7 @@ class TestDataGenerator:
 
     def generate_tags(self, quantity):
         subject_prefixes = ["INF", "STK", "MAT", "MAT-INF"]
+        subject_prefixes = [prefix.upper() for prefix in subject_prefixes]
 
         def make_subject_code():
             number = "".join([ str(random.randint(0,9))
@@ -67,8 +68,8 @@ if __name__ == "__main__":
             for t in tags:
                 out.write("%s\n" % t)
 
-    min_tag_n = raw_input("Min-imum number of tags for each user (empty->default): ")
-    max_tag_n = raw_input("Max-imum number of tags for each user (empty->default): ")
+    min_tag_n = raw_input("Min-imum number of tags for each user:")
+    max_tag_n = raw_input("Max-imum number of tags for each user:")
 
     if min_tag_n != "" and max_tag_n != "":
         wishes = generator.generate_wishes( users, int(max_tag_n), int(min_tag_n) )
