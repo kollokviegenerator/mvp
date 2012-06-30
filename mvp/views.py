@@ -75,6 +75,8 @@ def flush( request ):
         context_instance = RequestContext( request )
     )
 
+
+# Temporary test-specific views
 @csrf_protect
 def intrude( request, username ):
 
@@ -88,15 +90,67 @@ def intrude( request, username ):
         auth.login( request, user )
 
         out = render_to_response( "dialog.html", {
-            "title": "Fast intrusion",
-            "message": "You were logged in as: %s, and now you are logged in as %s" % (previous_username, username),
-            "user": user.username
-        } )
+                "title": "Fast intrusion",
+                "message": "You were logged in as: %s, and now you are logged in as %s" % (previous_username, username),
+            },
+            context_instance = RequestContext( request )
+        )
 
     else:
         out = render_to_response( "dialog.html", {
-            "title": "Fast intrusion failed",
-            "message": "You are still logged in as: %s, user %s was not authenticated" % (previous_username, username)
-        } )
+                "title": "Fast intrusion failed",
+                "message": "You are still logged in as: %s, user %s was not authenticated" % (previous_username, username)
+            },
+            context_instance = RequestContext( request )
+        )
 
     return out;
+
+
+@csrf_protect
+def test_wishes( request ):
+    data = open( "./gen/test/wishes.dat", "r" ).readlines();
+    separator = " " # [+] fetch from test generator
+
+    def extract_test_objects(data):
+        for line in data:
+            parameters = line.split( separator )
+            student = Student(
+                user=User.objects.get_or_create( username=parameters[0] )[0]
+            )
+            student.save()
+            wish = Wish(
+                student=student
+            )
+            wish.save()
+            for tag in parameters[1:]:
+                instance = Tag( name_of_tag=tag )
+                instance = Tag.objects.get_or_create( name_of_tag=tag )[0]
+                wish.tags.add( instance )
+            wish.save()
+
+    extract_test_objects(data)
+
+    return render_to_response( "dialog.html", {
+            "title": "Fetched following",
+            "message": "\n".join( data )
+        },
+        context_instance = RequestContext( request )
+    )
+
+def display_wishes( request ):
+    wishes = Wish.objects.all()
+
+    output = []
+    for w in wishes:
+        output.append(
+            (w.student.username, w.tags.all())
+        )
+
+    return render_to_response( "wishlist.html", {
+            "title": "Wish register",
+            "message": "Following wishes were captured in the database",
+            "wishlist": output
+        },
+        context_instance = RequestContext( request )
+    )

@@ -18,7 +18,8 @@ class Student(Person):
     """ Student
     Participates in group collaboration.
     """
-    pass
+    def username(self):
+        return self.user.username
 
 
 class Oracle(Person):

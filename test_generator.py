@@ -4,6 +4,9 @@ from string import ascii_lowercases
 # [!] in command-line mode, generates a single wish PER USER,
 # but allows random duplicate usernames
 
+# [*] Data is not shuffled, the user occurence has the same ordering as the
+# wish occurence.
+
 class TestDataGenerator:
 
     def __init__(self, username_length=6, path="gen/test/"):
@@ -16,6 +19,7 @@ class TestDataGenerator:
         minimum_length_factor = 0.7
 
         def make_username(length):
+            # [+] make each odd letter a vowel for better readability
             n = len(ascii_lowercase)
             return [ ascii_lowercase[random.randint(0,n-1)]
                     for x in range(length) ]
@@ -81,3 +85,4 @@ if __name__ == "__main__":
         with open( "./" + generator.path + "wishes.dat", "w" ) as out:
             for username,tags in wishes:
                 out.write( "%s %s\n" % (username," ".join(tags)) )
+
