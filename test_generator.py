@@ -70,6 +70,7 @@ if __name__ == "__main__":
     min_tag_n = raw_input("Min-imum number of tags for each user (empty->default): ")
     max_tag_n = raw_input("Max-imum number of tags for each user (empty->default): ")
 
+    # [!] FIX: defaults only when both are empty
     if min_tag_n != "" and max_tag_n != "":
         wishes = generator.generate_wishes( users, int(max_tag_n), int(min_tag_n) )
     else:
