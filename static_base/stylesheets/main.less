@@ -4,6 +4,37 @@ body {
     text-align: center;
 }
 
+.bar {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    display: inline;
+    float: right;
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    padding: 0.5em;
+    background-color: #111;
+
+    .status {
+        top: 1em;
+        right: 1em;
+        float: right;
+    }
+
+    .navigator {
+        bottom: 1em;
+        right: 1em;
+        float: right;
+
+        a {
+            text-decoration: none;
+            color: #CCC;
+            margin-right: 2em;
+        }
+    }
+}
+
+
 .navigator {
     position: fixed;
     bottom: 1em;
@@ -21,6 +52,20 @@ body {
         margin-right: 2em;
     }
 }
+
+.status {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    display: inline;
+    float: right;
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    padding: 0.5em;
+    background-color: #111;
+    color: white;
+}
+
 
 .content {
     width: 60%;

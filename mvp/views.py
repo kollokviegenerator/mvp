@@ -80,14 +80,17 @@ def intrude( request, username ):
 
     previous_username = request.user
     auth.logout( request )
-    user = auth.authenticate( username=username, password="!" )
+    user = auth.authenticate( username=username, password="123" )
+
+    print User.objects.get( username=username ).check_password("123")
 
     if user != None:
-        auth.login( request, candidate )
+        auth.login( request, user )
 
         out = render_to_response( "dialog.html", {
             "title": "Fast intrusion",
-            "message": "You were logged in as: %s, and now you are logged in as %s" % (previous_username, username)
+            "message": "You were logged in as: %s, and now you are logged in as %s" % (previous_username, username),
+            "user": user.username
         } )
 
     else:

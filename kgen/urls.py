@@ -5,7 +5,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url( r'^admin/',                include(admin.site.urls)),
-    url( r'^intrude/(\w{1,10})',    'mvp.views.intrude' ),
+    url( r'^intrude/([a-z]{1,10})', 'mvp.views.intrude' ),
     url( r'^$',                     'mvp.views.main' ),
     url( r'^add/$',                 'mvp.views.add' ),
     url( r'^display/$',             'mvp.views.display' ),
