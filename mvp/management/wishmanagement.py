@@ -19,7 +19,8 @@ class WishManagement:
     def addwish(self, student, tags):
         """
             Add a user
-            @param usr: the user to be added
+            @param student: the student thats register a wish
+            @param tags: wish tags
         """
 
         if not tags:
@@ -50,21 +51,11 @@ class WishManagement:
         finally:
             transaction.commit()
 
-    def deletewish(self, usr):
+    def deletewish(self, wish):
         """
-            Delete a user (or rather, set the is_active flag to False so
-            any foreign keys to users won't break
-            @param usr: the user to remove
+            Delete a wish
         """
-        usr = usr.strip() #remove whitespace
-        try:
-            u = User.objects.get(username=usr)
-            u.is_active=False
-            u.save()
-
-            print "user %s removed (is_active=False)" % usr
-        except User.DoesNotExist:
-            print "User '%s' does not exists in database." % usr
+        pass
 
     def flush(self):
         """
