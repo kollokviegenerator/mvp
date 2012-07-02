@@ -108,7 +108,7 @@ def intrude( request, username ):
 
 
 @csrf_protect
-def test_wishes( request ):
+def test_wishes_a( request ):
     data = open( "./gen/test/wishes.dat", "r" ).readlines();
     separator = " " # [+] fetch from test generator
 
@@ -138,6 +138,22 @@ def test_wishes( request ):
         context_instance = RequestContext( request )
     )
 
+
+@csrf_protect
+def populate_wishes( request ):
+    SEPARATOR = " "
+    data = open( "./gen/test/wishes.dat", "r" ).readlines();
+
+    from management.wishmanagement import WishManagement
+    manager = WishManagement()
+
+    def extract_test_objects(data):
+        for line in data:
+            candidate = line.split( SEPARATOR )
+            manager.addwish( candidate[0], candidate[1:] )
+
+    return redirect( "/test/wishes/" )
+
 def display_wishes( request ):
     wishes = Wish.objects.all()
 
@@ -152,5 +168,15 @@ def display_wishes( request ):
             "message": "Following wishes were captured in the database",
             "wishlist": output
         },
+        context_instance = RequestContext( request )
+    )
+
+def flush_wishes( request ):
+    Wish.objects.all().delete()
+
+    return render_to_response( "dialog.html", {
+        "title": "All wishes were deleted",
+        "message": "All wishes were removed from the databased.",
+    },
         context_instance = RequestContext( request )
     )
