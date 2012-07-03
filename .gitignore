@@ -9,3 +9,4 @@ static/
 *.tmp
 .idea
 gen
+privatetestfiles/
