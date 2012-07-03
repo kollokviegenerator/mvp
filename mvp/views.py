@@ -80,8 +80,6 @@ def intrude( request, username ):
     auth.logout( request )
     user = auth.authenticate( username=username, password="123" )
 
-    print User.objects.get( username=username ).check_password("123")
-
     if user != None:
         auth.login( request, user )
 
@@ -103,9 +101,33 @@ def intrude( request, username ):
     return out;
 
 
-# Wish testing
+# Testing
 
-@csrf_protect
+def display_students( request ):
+    users = Student.objects.all()
+    output = [u.username for u in users]
+
+    return render_to_response( "dialog.html", {
+            "title": "All registered students",
+            "message": "Listing %d students" % (len(output)),
+            "set": output
+        },
+        context_instance = RequestContext( request )
+    )
+
+def populate_students( request ):
+    data = open( "./gen/test/users.dat", "r" ).readlines();
+
+    from management.usermanagement import UserManagement
+    manager = UserManagement()
+
+    for line in data:
+        manager.adduser( line )
+        manager.updateuser( line, arg="s" )
+
+    return redirect( "/test/students/" )
+
+
 def populate_wishes( request ):
     SEPARATOR = " "
     data = open( "./gen/test/wishes.dat", "r" ).readlines();
@@ -140,8 +162,8 @@ def flush_wishes( request ):
     Wish.objects.all().delete()
 
     return render_to_response( "dialog.html", {
-        "title": "All wishes were deleted",
-        "message": "All wishes were removed from the databased.",
-    },
-    context_instance = RequestContext( request )
-)
+            "title": "All wishes were deleted",
+            "message": "All wishes were removed from the databased.",
+        },
+        context_instance = RequestContext( request )
+    )

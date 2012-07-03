@@ -50,7 +50,7 @@ class WishManagement:
                 except Tag.DoesNotExist:
                     print "Tag %s does not exist" % t
 
-            print "Wish added"
+            print "Wish added for user %s" % student
         except Student.DoesNotExist: #Can't find student
             print "User '%s' is not registered as a student" % student
             transaction.rollback()

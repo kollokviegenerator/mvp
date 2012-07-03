@@ -82,15 +82,15 @@ class UserManagement:
             if arg[0] == 's' or arg[0] == 'student':
                 s = Student(user=u[0])
                 s.save()
-                print "User %s is now registered as student." % usr
+                print "User '%s' is now registered as student." % usr
             elif arg[0] == 'o' or arg[0] == 'oracle':
                 o = Oracle(user=u[0])
                 o.save()
-                print "User %s is now registered as oracle." % usr
+                print "User '%s' is now registered as oracle." % usr
             else: #arg is now r
                 u[0].is_active = True
                 u[0].save()
-                print "User %s is now restored (is_active=True)." % usr
+                print "User '%s' is now restored (is_active=True)." % usr
         except:
             print "Nothing to update"
         finally:
