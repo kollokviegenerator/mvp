@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url( r'^flush/$',               'mvp.views.flush' ),
     # wish testing
     url( r'^test/wishes/$',         'mvp.views.display_wishes' ),
-    url( r'^test/wishes/populate$', 'mvp.views.populate_wishes' ),
-    url( r'^test/wishes/flush$',    'mvp.views.flush_wishes' ),
+    url( r'^test/wishes/populate/$','mvp.views.populate_wishes' ),
+    url( r'^test/wishes/flush/$',   'mvp.views.flush_wishes' ),
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
