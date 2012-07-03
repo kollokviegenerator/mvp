@@ -24,6 +24,9 @@ class Student(models.Model):
     def username(self):
         return self.user.username
 
+    def __unicode__(self):
+        return self.user.username
+
 class Oracle(Student):
     """ Oracle
     Student with a certain expertise.
@@ -42,6 +45,7 @@ class Group(models.Model):
 
     def __unicode__(self):
         return "Group" #TODO change this
+
 
 class Tag(models.Model):
     """ Tag
