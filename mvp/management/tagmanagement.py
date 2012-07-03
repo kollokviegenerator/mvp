@@ -2,6 +2,7 @@
 """
     The unifi command line interface
 """
+#TODO: Implement gettag
 from mvp.models import Tag
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -35,6 +36,12 @@ class TagManagement:
             any foreign keys to users won't break
             @param usr: the user to remove
         """
+        pass
+
+    def getTag(self, name):
+        """docstring for getTag"""
+        #return tag with name @param name
+
         pass
 
     def flush(self):

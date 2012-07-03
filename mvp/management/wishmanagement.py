@@ -2,6 +2,8 @@
 """
     The unifi command line interface
 """
+#TODO: Implement getWish
+#TODO: return created wish - or return already existing wish (if same student and tags)
 from mvp.models import Wish, Student, Tag
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -28,6 +30,13 @@ class WishManagement:
             return
 
         student = student.strip()
+        w = self.getWish(student, tags)
+        if not w == None:
+            print "Wish exist"
+            return
+        else:
+            print "lol"
+
         try:
             s = Student.objects.get(user=User.objects.get(username=student))
 
@@ -51,11 +60,22 @@ class WishManagement:
         finally:
             transaction.commit()
 
+        #Return the created wish
+        return w
+
     def deletewish(self, wish):
         """
             Delete a wish
         """
         pass
+
+    def getWish(self, student, tags):
+        """
+            get a wish
+        """
+        #return wish - and a dream come true
+        print "getAWish"
+        return None
 
     def flush(self):
         """

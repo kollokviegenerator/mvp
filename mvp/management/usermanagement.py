@@ -2,6 +2,7 @@
 """
     The unifi command line interface
 """
+#TODO: Implement getUser
 from mvp.models import Student, Oracle
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
@@ -23,17 +24,22 @@ class UserManagement:
         """
         usr = usr.strip() #remove whitespace
         try:
-            User.objects.create_user(usr, password="123")
+            u = User.objects.create_user(usr, password="123")
             print "user %s added!" % usr
         except IntegrityError:
-            print "User '%s' exists in database." % usr
             transaction.rollback()
-            if not User.objects.get(username=usr).is_active:
+            print "User '%s' exists in database." % usr
+            u = User.objects.get(username=usr)
+            transaction.commit()
+
+            if not u.is_active:
                 print "If the user at some point was deleted "\
                     "you want to do a user restore instead of add"
 
-        finally:
+        else:
             transaction.commit()
+
+        return u
 
     def deleteuser(self, usr):
         """
