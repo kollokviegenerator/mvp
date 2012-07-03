@@ -10,9 +10,11 @@ urlpatterns = patterns('',
     url( r'^add/$',                 'mvp.views.add' ),
     url( r'^display/$',             'mvp.views.display' ),
     url( r'^flush/$',               'mvp.views.flush' ),
-    # wish testing
-    url( r'^test/wishes/$',         'mvp.views.display_wishes' ),
-    url( r'^test/wishes/populate/$','mvp.views.populate_wishes' ),
-    url( r'^test/wishes/flush/$',   'mvp.views.flush_wishes' ),
+    # testing
+    url( r'^test/students/$',          'mvp.views.display_students' ),
+    url( r'^test/students/populate/$', 'mvp.views.populate_students' ),
+    url( r'^test/wishes/$',            'mvp.views.display_wishes' ),
+    url( r'^test/wishes/populate/$',   'mvp.views.populate_wishes' ),
+    url( r'^test/wishes/flush/$',      'mvp.views.flush_wishes' ),
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )

@@ -6,8 +6,8 @@ from string import ascii_lowercase
 # [!] in command-line mode, generates a single wish PER USER,
 # but allows random duplicate usernames
 
-# [*] Data is not shuffled, the user occurence has the same ordering as the
-# wish occurence.
+# [*] Data is not shuffled, the user occurrence has the same ordering as the
+# wish occurrence.
 
 class TestDataGenerator:
 
@@ -64,16 +64,15 @@ if __name__ == "__main__":
 
     if "y" in raw_input("Save USERS to file? (y/n): "):
         with open( "./" + generator.path + "users.dat", "w" ) as out:
-            for u in users:
-                out.write("%s\n" % u)
+            out.write( "\n".join(users) )
 
     tags = generator.generate_tags( int(raw_input( "Tag quantity: " )) )
 
     if "y" in raw_input("Save TAGS to file? (y/n): "):
         with open( "./" + generator.path + "tags.dat", "w" ) as out:
-            for t in tags:
-                out.write("%s\n" % t)
+            out.write( "\n".join(tags) )
 
+    print "(make sure to specify both values, or defaults will be set)"
     min_tag_n = raw_input("Min-imum number of tags for each user: ")
     max_tag_n = raw_input("Max-imum number of tags for each user: ")
 

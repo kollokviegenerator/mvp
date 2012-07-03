@@ -153,7 +153,7 @@ class apidraft:
         print "Type '%s [subcommand] -h, --help for help on a specific subcommand (not impl. yet)\n"
         print "Available subcommands"
 
-        print "[user]"
+        print "[User]"
         print "\t-u,\t--adduser\t<user>"
         print "\t--du,\t--deleteuser\t<user>"
         print "\t--uu,\t--updateuser\t<user> <s/o/r>"
