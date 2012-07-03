@@ -1,5 +1,7 @@
+#!/usr/bin/env python2.7
+
 import random
-from string import ascii_lowercases
+from string import ascii_lowercase
 
 # [!] in command-line mode, generates a single wish PER USER,
 # but allows random duplicate usernames
@@ -36,7 +38,7 @@ class TestDataGenerator:
         return output
 
     def generate_tags(self, quantity):
-        subject_prefixes = ["INF", "STK", "MAT", "MAT-INF"]
+        subject_prefixes = ["INF"]
         subject_prefixes = [prefix.upper() for prefix in subject_prefixes]
 
         def make_subject_code():
@@ -47,10 +49,10 @@ class TestDataGenerator:
         return [make_subject_code() for i in range(quantity)]
 
 
-    def generate_wishes(self, users, max_tag_quantity=6, min_tag_quantity=1):
+    def generate_wishes(self, users, tags, max_tag_quantity=6, min_tag_quantity=1):
         for u in users:
             quantity = random.randint( min_tag_quantity, max_tag_quantity )
-            yield (u, self.generate_tags(quantity))
+            yield (u, random.sample(tags, quantity))
 
 
 
@@ -72,14 +74,14 @@ if __name__ == "__main__":
             for t in tags:
                 out.write("%s\n" % t)
 
-    min_tag_n = raw_input("Min-imum number of tags for each user:")
-    max_tag_n = raw_input("Max-imum number of tags for each user:")
+    min_tag_n = raw_input("Min-imum number of tags for each user: ")
+    max_tag_n = raw_input("Max-imum number of tags for each user: ")
 
     # [!] FIX: defaults only when both are empty
     if min_tag_n != "" and max_tag_n != "":
-        wishes = generator.generate_wishes( users, int(max_tag_n), int(min_tag_n) )
+        wishes = generator.generate_wishes( users, tags, int(max_tag_n), int(min_tag_n) )
     else:
-        wishes = generator.generate_wishes( users )
+        wishes = generator.generate_wishes( users, tags )
 
     if "y" in raw_input("Save WISHES to file? (y/n): "):
         with open( "./" + generator.path + "wishes.dat", "w" ) as out:

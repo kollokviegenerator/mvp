@@ -61,10 +61,6 @@ def flush( request ):
 
     tables = [Tag, Student, Wish]
 
-    # import mvp
-    # from django.db import models
-    # print [model for model in mvp.models.__dict__]
-
     map( lambda x: x.objects.all().delete(), tables )
     table_names = ", ".join([ table.__name__ for table in tables ])
 
@@ -107,36 +103,21 @@ def intrude( request, username ):
     return out;
 
 
+# Wish testing
+
 @csrf_protect
-def test_wishes( request ):
+def populate_wishes( request ):
+    SEPARATOR = " "
     data = open( "./gen/test/wishes.dat", "r" ).readlines();
-    separator = " " # [+] fetch from test generator
 
-    def extract_test_objects(data):
-        for line in data:
-            parameters = line.split( separator )
-            student = Student(
-                user=User.objects.get_or_create( username=parameters[0] )[0]
-            )
-            student.save()
-            wish = Wish(
-                student=student
-            )
-            wish.save()
-            for tag in parameters[1:]:
-                instance = Tag( name_of_tag=tag )
-                instance = Tag.objects.get_or_create( name_of_tag=tag )[0]
-                wish.tags.add( instance )
-            wish.save()
+    from management.wishmanagement import WishManagement
+    manager = WishManagement()
 
-    extract_test_objects(data)
+    for line in data:
+        candidate = line.split( SEPARATOR )
+        manager.addwish( candidate[0], candidate[1:] )
 
-    return render_to_response( "dialog.html", {
-            "title": "Fetched following",
-            "message": "\n".join( data )
-        },
-        context_instance = RequestContext( request )
-    )
+    return redirect( "/test/wishes/" )
 
 def display_wishes( request ):
     wishes = Wish.objects.all()
@@ -154,3 +135,13 @@ def display_wishes( request ):
         },
         context_instance = RequestContext( request )
     )
+
+def flush_wishes( request ):
+    Wish.objects.all().delete()
+
+    return render_to_response( "dialog.html", {
+        "title": "All wishes were deleted",
+        "message": "All wishes were removed from the databased.",
+    },
+    context_instance = RequestContext( request )
+)
