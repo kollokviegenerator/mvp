@@ -20,11 +20,31 @@ class TestDataGenerator:
         output = []
         minimum_length_factor = 0.7
 
+        #def make_username(length):
+        #    # [+] make each odd letter a vowel for better readability
+        #    n = len(ascii_lowercase)
+        #    return [ ascii_lowercase[random.randint(0,n-1)]
+        #            for x in range(length) ]
+        
         def make_username(length):
-            # [+] make each odd letter a vowel for better readability
-            n = len(ascii_lowercase)
-            return [ ascii_lowercase[random.randint(0,n-1)]
-                    for x in range(length) ]
+            output = ""
+
+            vowels = set(["a", "e", "i", "o", "u"])
+            consonants = set(ascii_lowercase).difference(vowels) # [!] not platform independent
+
+            vowels = list(vowels)
+            consonants = list(consonants)
+
+            while length != 0:
+                output += random.choice(consonants)
+                output += random.choice(vowels)
+                length -= 2
+                if length == 1:
+                    output += random.choice(consonants)
+                    break
+
+            return output
+
 
         for i in range(quantity):
             username_length = random.randint(
