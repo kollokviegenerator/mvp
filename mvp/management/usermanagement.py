@@ -40,6 +40,7 @@ class UserManagement:
             @return: the user, or None if no user exists
         """
 
+        usr = usr.strip() #remove whitespace
         try:
             return User.objects.get(username=usr)
         except User.DoesNotExist:
@@ -52,6 +53,7 @@ class UserManagement:
             @return: the student, or None if no student exists
         """
 
+        usr = usr.strip() #remove whitespace
         try:
             return Student.objects.get(user=self.getuser(usr))
         except:
@@ -64,6 +66,7 @@ class UserManagement:
             @return: the oracle, or None if no oracle exists
         """
 
+        usr = usr.strip() #remove whitespace
         try:
             return Oracle.objects.get(user=self.getuser(usr))
         except:
@@ -75,6 +78,7 @@ class UserManagement:
             any foreign keys to users won't break
             @param usr: the user to remove
         """
+
         usr = usr.strip() #remove whitespace
         try:
             u = User.objects.get(username=usr)
@@ -87,7 +91,7 @@ class UserManagement:
     def updateuser(self, usr, arg):
         """
             Update an user
-            @param usr: the user to update
+            @param usr: the user(name) to update
             @param: arg: info to be updated
         """
 

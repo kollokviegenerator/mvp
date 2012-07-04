@@ -3,7 +3,6 @@
     The unifi command line interface
 """
 from mvp.models import Tag
-from django.db.utils import IntegrityError
 
 class TagManagement:
     """
@@ -34,8 +33,10 @@ class TagManagement:
             pass
 
     def getTag(self, name):
-        """docstring for getTag"""
-        #return tag with name @param name
+        """
+        return a tag
+        @param name: the name of the tag
+        """
 
         try:
             return Tag.objects.get(name_of_tag=name)

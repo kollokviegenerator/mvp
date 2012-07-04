@@ -3,22 +3,20 @@
     The unifi command line interface
 """
 from mvp.models import Wish, Student, Tag
-from django.db.utils import IntegrityError
-from django.db import transaction
 from django.contrib.auth.models import User
 
 class WishManagement:
-
     """
         Takes care of wish management (adding, removing, updating ...)
     """
+
     def __init__(self):
         pass
 
     def addwish(self, student, tags):
         """
             Add a user
-            @param student: the student thats register a wish
+            @param student: the student's username thats register a wish
             @param tags: wish tags
         """
 
@@ -66,9 +64,10 @@ class WishManagement:
     def getWish(self, student, tags):
         """
             get a wish (and your dream will come true)
-            @param student: tha student
-            @param tags: tha tags
+            @param student: the students username
+            @param tags: a list with tag names
         """
+
         try:
             s = Student.objects.get(user=User.objects.get(username=student))
             wishes = Wish.objects.filter(student=s)

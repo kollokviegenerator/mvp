@@ -5,7 +5,6 @@
 from mvp.models import Student, Oracle, Wish, Tag, Group
 
 class GroupManagement:
-
     """
         Takes care of group management
     """
