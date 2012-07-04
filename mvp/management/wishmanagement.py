@@ -15,7 +15,6 @@ class WishManagement:
     def __init__(self):
         pass
 
-#    @transaction.commit_manually
     def addwish(self, student, tags):
         """
             Add a user
@@ -61,7 +60,8 @@ class WishManagement:
             Delete a wish
         """
 
-        pass
+        wish.delete()
+
 
     def getWish(self, student, tags):
         """

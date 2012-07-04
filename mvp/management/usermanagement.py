@@ -5,10 +5,8 @@
 from mvp.models import Student, Oracle
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
-from django.db import transaction
 
 class UserManagement:
-
     """
         Takes care of user management (adding, removing, updating ...)
     """
@@ -19,9 +17,9 @@ class UserManagement:
         """
             Add a user
             @param usr: the user to be added
+            @return: the created user
         """
         usr = usr.strip() #remove whitespace
-        #bruk get_or_create
 
         try:
             u = User.objects.get(username=usr)
@@ -34,6 +32,42 @@ class UserManagement:
                     "you want to do a user restore instead of add"
 
         return u
+
+    def getuser(self, usr):
+        """
+            Get the user with username usr
+            @param usr: the username
+            @return: the user, or None if no user exists
+        """
+
+        try:
+            return User.objects.get(username=usr)
+        except User.DoesNotExist:
+            return None
+
+    def getstudent(self, usr):
+        """
+            Get the student with username usr
+            @param usr: the username
+            @return: the student, or None if no student exists
+        """
+
+        try:
+            return Student.objects.get(user=self.getuser(usr))
+        except:
+            return None
+
+    def getoracle(self, usr):
+        """
+            Get the oracle with username usr
+            @param usr: the username
+            @return: the oracle, or None if no oracle exists
+        """
+
+        try:
+            return Oracle.objects.get(user=self.getuser(usr))
+        except:
+            return None
 
     def deleteuser(self, usr):
         """

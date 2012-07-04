@@ -4,7 +4,6 @@
 """
 from mvp.models import Tag
 from django.db.utils import IntegrityError
-from django.db import transaction
 
 class TagManagement:
     """
