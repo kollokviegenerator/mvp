@@ -103,20 +103,32 @@ class Pair:
                len( self.A.complement() ) * deletion_cost
 
     # Similarity indices
+
+    def sorensen_similarity( self ):
+        return ( 2.0 * len( self.common()) ) / ( len(self.A) + len(self.B) )
+
     def tversky_similarity( self, alpha = 0.5, beta = 0.5 ):
+        """
+        @param alpha
+        @param beta
+        """
         numerator = len(self.common())
         denominator = len(self.common()) + alpha*len(self.A.own()) + beta*len(self.B.own())
         return numerator / denominator
 
     def jaccard_similarity( self ):
-        return len(self.common()) / len(self.all())
+        return len(self.common()) / \
+               len(self.all())
 
     def mountford_similarity( self ):
-        numerator = len(self.common())
+
+        print len(self.common())
+        print len(self.A),len(self.B)
+
+        numerator = 2.0 * len(self.common())
         denominator = 2.0 * len(self.A) * len(self.B) \
                       - (
-                            ( len(self.A) + len(self.B) )
-                            * len( self.common() )
+                            ( len(self.A) + len(self.B) ) * len( self.common() )
                         )
 
         return numerator / denominator
@@ -136,6 +148,8 @@ if __name__ == "__main__":
         c.distance( insertion_cost=2, deletion_cost=1 ),
         "Distance from B -> A",
         c.inverse_distance( insertion_cost=2, deletion_cost=1 ),
+        "Sorensen index",
+        c.sorensen_similarity(),
         "Tversky index",
         c.tversky_similarity(),
         "Jaccard index",
