@@ -61,8 +61,8 @@ class Pair:
             return self.this - self.other
 
     def __init__( self, A, B ):
-        self.A_wish = A
-        self.B_wish = B
+        self.wish_A = A
+        self.wish_B = B
         self.A = self.Sample( A.tags.all(), B.tags.all() )
         self.B = self.Sample( B.tags.all(), A.tags.all() )
 

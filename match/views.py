@@ -13,7 +13,10 @@ def match( request ):
 
     wishes = Wish.objects.all()
     pool = Pool( wishes )
-    # result = pool.pair()
+    result = sorted(
+        [ (x.mountford_similarity(), x.wish_A, x.wish_B)
+        for x in pool.pair()], key=lambda a: a[0]
+    )
 
     return render_to_response( "dialog.html", {
             "title": "Test",
