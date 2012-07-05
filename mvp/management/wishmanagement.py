@@ -2,26 +2,23 @@
 """
     The unifi command line interface
 """
-#TODO: Implement getWish
-#TODO: return created wish - or return already existing wish (if same student and tags)
 from mvp.models import Wish, Student, Tag
-from django.db.utils import IntegrityError
-from django.db import transaction
 from django.contrib.auth.models import User
+from usermanagement import UserManagement
+
 
 class WishManagement:
-
     """
         Takes care of wish management (adding, removing, updating ...)
     """
-    def __init__(self):
-        pass
 
-    @transaction.commit_manually
-    def addwish(self, student, tags):
+    def __init__(self):
+        self.user_management = UserManagement()
+
+    def addWish(self, student, tags):
         """
             Add a user
-            @param student: the student thats register a wish
+            @param student: the student's thats register a wish
             @param tags: wish tags
         """
 
@@ -29,57 +26,62 @@ class WishManagement:
             print "Please specify at least one tag"
             return
 
-        student = student.strip()
+        if student.__class__ == str:
+            student = student.strip()
+            student = self.user_management.getStudent(student)
+
         w = self.getWish(student, tags)
-        if not w == None:
-            print "Wish exist"
-            return
-        else:
-            print "lol"
 
-        try:
-            s = Student.objects.get(user=User.objects.get(username=student))
+        if w != None:
+            print "Wish for: %s exist" % student
+            return w
 
-            w = Wish()
-            w.student=s
-            w.save()
-            for t in tags:
-                try:
-                    t = Tag.objects.get_or_create(name_of_tag=t)
-                    w.tags.add(t[0])
-                except Tag.DoesNotExist:
-                    print "Tag %s does not exist" % t
+        w = Wish()
+        w.student=student
+        w.save()
 
-            print "Wish added for user %s" % student
-        except Student.DoesNotExist: #Can't find student
-            print "User '%s' is not registered as a student" % student
-            transaction.rollback()
-        except User.DoesNotExist: #Can't even find the user
-            print "Student '%s' does not exists in database." % student
-            transaction.rollback()
-        finally:
-            transaction.commit()
+        for t in tags:
+            try:
+                t = Tag.objects.get_or_create(name_of_tag=t)
+                w.tags.add(t[0])
+            except Tag.DoesNotExist:
+                print "Tag %s does not exist" % t
 
-        #Return the created wish
+        print "Wish added for user %s" % student
+
         return w
 
-    def deletewish(self, wish):
+    def deleteWish(self, wish):
         """
             Delete a wish
         """
-        pass
+
+        wish.delete()
 
     def getWish(self, student, tags):
         """
-            get a wish
+            get a wish (and your dream will come true)
+            @param student: the students username
+            @param tags: a list with tag names
         """
-        #return wish - and a dream come true
-        print "getAWish"
+
+        if student.__class__ == str:
+            student = self.user_management.getStudent(student)
+
+        wishes = Wish.objects.filter(student=student)
+
+        for w in wishes:
+            wishtags = [t.name_of_tag for t in w.tags.all()]
+
+            if set (wishtags) == set (tags):
+                return w
+
+        #If wish found
         return None
 
     def flush(self):
         """
-            Removes all entries in the wish table (and not just is_active=False)
+            Removes all entries in the wish table
         """
 
         Wish.objects.all().delete()

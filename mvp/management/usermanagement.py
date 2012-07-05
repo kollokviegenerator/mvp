@@ -2,51 +2,81 @@
 """
     The unifi command line interface
 """
-#TODO: Implement getUser
 from mvp.models import Student, Oracle
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
-from django.db import transaction
 
 class UserManagement:
-
     """
         Takes care of user management (adding, removing, updating ...)
     """
     def __init__(self):
         pass
 
-    @transaction.commit_manually
-    def adduser(self, usr):
+    def addUser(self, usr):
         """
             Add a user
             @param usr: the user to be added
+            @return: the created user
         """
         usr = usr.strip() #remove whitespace
+
         try:
+            u = User.objects.get(username=usr)
+            print "User '%s' exists in database." % usr
+        except:
             u = User.objects.create_user(usr, password="123")
             print "user %s added!" % usr
-        except IntegrityError:
-            transaction.rollback()
-            print "User '%s' exists in database." % usr
-            u = User.objects.get(username=usr)
-            transaction.commit()
-
             if not u.is_active:
                 print "If the user at some point was deleted "\
                     "you want to do a user restore instead of add"
 
-        else:
-            transaction.commit()
-
         return u
 
-    def deleteuser(self, usr):
+    def getUser(self, usr):
+        """
+            Get the user with username usr
+            @param usr: the username
+            @return: the user, or None if no user exists
+        """
+
+        usr = usr.strip() #remove whitespace
+        try:
+            return User.objects.get(username=usr)
+        except User.DoesNotExist:
+            return None
+
+    def getStudent(self, usr):
+        """
+            Get the student with username usr
+            @param usr: the username
+            @return: the student, or None if no student exists
+        """
+
+        try:
+            return Student.objects.get(user=self.getUser(usr))
+        except:
+            return None
+
+    def getOracle(self, usr):
+        """
+            Get the oracle with username usr
+            @param usr: the username
+            @return: the oracle, or None if no oracle exists
+        """
+
+        try:
+            return Oracle.objects.get(user=self.getUser(usr))
+        except:
+            return None
+
+    def deleteUser(self, usr):
         """
             Delete a user (or rather, set the is_active flag to False so
             any foreign keys to users won't break
             @param usr: the user to remove
         """
+
         usr = usr.strip() #remove whitespace
         try:
             u = User.objects.get(username=usr)
@@ -56,11 +86,10 @@ class UserManagement:
         except User.DoesNotExist:
             print "User '%s' does not exists in database." % usr
 
-    @transaction.commit_manually
-    def updateuser(self, usr, arg):
+    def updateUser(self, usr, arg):
         """
             Update an user
-            @param usr: the user to update
+            @param usr: the user(name) to update
             @param: arg: info to be updated
         """
 
@@ -71,30 +100,26 @@ class UserManagement:
 
         usr = usr.strip()
 
-        try:
-            u = User.objects.get_or_create(username=usr)
-        except User.DoesNotExist:
-            print "User '%s' does not exists in database." % usr
-            transaction.rollback()
-            return
+        u = User.objects.get_or_create(username=usr)
 
-        try:
-            if arg[0] == 's' or arg[0] == 'student':
-                s = Student(user=u[0])
-                s.save()
-                print "User '%s' is now registered as student." % usr
-            elif arg[0] == 'o' or arg[0] == 'oracle':
-                o = Oracle(user=u[0])
-                o.save()
-                print "User '%s' is now registered as oracle." % usr
-            else: #arg is now r
-                u[0].is_active = True
-                u[0].save()
-                print "User '%s' is now restored (is_active=True)." % usr
-        except:
-            print "Nothing to update"
-        finally:
-            transaction.commit()
+        if arg[0] == 's' or arg[0] == 'student':
+            s = Student.objects.get_or_create(user=u[0])
+            print "User '%s' is now registered as student." % usr
+
+        elif arg[0] == 'o' or arg[0] == 'oracle':
+            try:
+                s = Student.objects.get(user=u[0])
+                s.delete()
+            except:
+                pass
+
+            o = Oracle.objects.get_or_create(user=u[0])
+            print "User '%s' is now registered as oracle." % usr
+
+        else: #arg is now r
+            u[0].is_active = True
+            u[0].save()
+            print "User '%s' is now restored (is_active=True)." % usr
 
     def flush(self):
         """

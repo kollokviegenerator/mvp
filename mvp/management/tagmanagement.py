@@ -2,47 +2,46 @@
 """
     The unifi command line interface
 """
-#TODO: Implement gettag
 from mvp.models import Tag
-from django.db.utils import IntegrityError
-from django.db import transaction
 
 class TagManagement:
     """
-        Takes care of tag management (adding, removing, updating ...)
+        Takes care of tag management (adding, removing, getting ...)
     """
     def __init__(self):
         pass
 
-    @transaction.commit_manually
-    def addtag(self, tag):
+    def addTag(self, tag):
         """
             Add a user
             @param usr: the user to be added
         """
         tag = tag.strip() #remove whitespace
-        try:
-            Tag(name_of_tag=tag).save()
-            print "tag '%s' added!" % tag
-        except IntegrityError:
-            print "tag '%s' exists in database." % tag
-            transaction.rollback()
-        finally:
-            transaction.commit()
+        t = Tag.objects.get_or_create(name_of_tag=tag)
+        print "tag '%s' added!" % tag
+        return t
 
-    def deletetag(self, tag):
+    def deleteTag(self, tag):
         """
             Delete a tag (or rather, set the is_active flag to False so
             any foreign keys to users won't break
             @param usr: the user to remove
         """
-        pass
+        try:
+            Tag.objects.get(name_of_tag=name).delete()
+        except Tag.DoesNotExist:
+            pass
 
     def getTag(self, name):
-        """docstring for getTag"""
-        #return tag with name @param name
+        """
+            Return a tag
+            @param name: the name of the tag
+        """
 
-        pass
+        try:
+            return Tag.objects.get(name_of_tag=name)
+        except Tag.DoesNotExist:
+            return None
 
     def flush(self):
         """
