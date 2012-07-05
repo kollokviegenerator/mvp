@@ -71,12 +71,12 @@ class apidraft:
             #argument is a file of users
             f = open(in_user, 'r')
             for usr in f:
-                self.user_management.adduser(usr)
+                self.user_management.addUser(usr)
 
             f.close()
         except IOError:
             #Argument is a single user
-            self.user_management.adduser(in_user)
+            self.user_management.addUser(in_user)
 
     def deleteuser(self, in_user):
         """
@@ -88,9 +88,9 @@ class apidraft:
             #argument is a file of users
             f = open(in_user, 'r')
             for usr in f:
-                self.user_management.deleteuser(usr)
+                self.user_management.deleteUser(usr)
         except IOError:
-            self.user_management.deleteuser(in_user)
+            self.user_management.deleteUser(in_user)
 
 
     def updateuser(self, in_user, args):
@@ -104,9 +104,9 @@ class apidraft:
             #argument is a file of users
             f = open(in_user, 'r')
             for usr in f:
-                self.user_management.updateuser(usr, args)
+                self.user_management.updateUser(usr, args)
         except IOError:
-                self.user_management.updateuser(in_user, args)
+                self.user_management.updateUser(in_user, args)
 
     def addtag(self, in_tag):
 
@@ -118,12 +118,12 @@ class apidraft:
             #argument is a file of users
             f = open(in_tag, 'r')
             for tag in f:
-                self.tag_management.addtag(tag)
+                self.tag_management.addTag(tag)
 
             f.close()
         except IOError:
             #Argument is a single user
-            self.tag_management.addtag(in_tag)
+            self.tag_management.addTag(in_tag)
 
     def addwish(self, student, tags):
 
@@ -135,12 +135,12 @@ class apidraft:
                 wishline = wishline.strip().split()
                 studline = wishline[0]
                 tagsline = wishline[1:]
-                self.wish_management.addwish(studline, tagsline)
+                self.wish_management.addWish(studline, tagsline)
 
             f.close()
         except IOError:
             #Argument is a single user
-            self.wish_management.addwish(student, tags)
+            self.wish_management.addWish(student, tags)
 
     def usage(self):
         """

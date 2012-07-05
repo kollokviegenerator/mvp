@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib import auth
 from mvp.models import Wish, Student, Tag
 
+import match
+
 from controls import *
 
 @csrf_protect
@@ -122,8 +124,8 @@ def populate_students( request ):
     manager = UserManagement()
 
     for line in data:
-        manager.adduser( line )
-        manager.updateuser( line, arg="s" )
+        manager.addUser( line )
+        manager.updateUser( line, arg="s" )
 
     return redirect( "/test/students/" )
 
@@ -137,7 +139,7 @@ def populate_wishes( request ):
 
     for line in data:
         candidate = line.split( SEPARATOR )
-        manager.addwish( candidate[0], candidate[1:] )
+        manager.addWish( candidate[0], candidate[1:] )
 
     return redirect( "/test/wishes/" )
 

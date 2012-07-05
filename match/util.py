@@ -1,31 +1,26 @@
 #!/usr/bin/env python2.7
 
 from __future__ import division
+from itertools import combinations
 from math import sqrt
 
 class Pool:
     """
-    Ordering of pairs given by their index produced out of rating_function
+    Ordering of pairs given by their index
 
     @param wishes               the list of wishes with at least one tag in each
-    @param rating_function      the function that calculates the quality index
-                                of each wish pair.
     """
-    def __init__( self, wishes, rating_function ):
+    def __init__( self, wishes ):
         self.wishes = wishes
-        self.rate = rating_function
 
     def pair( self ):
         """
         @return     a list of pairs ordered by their quality index (score)
         """
-        pass
+        pairs = ( Pair( p[0], p[1] ) for p in combinations( self.wishes, 2 ) )
+        return pairs
 
-    def __getitem__( self, index ):
-        """
-        @return     n-th wish-pair in the list ordered by quality index
-        """
-        pass
+
 
 
 class Pair:
@@ -66,8 +61,10 @@ class Pair:
             return self.this - self.other
 
     def __init__( self, A, B ):
-        self.A = self.Sample( A, B )
-        self.B = self.Sample( B, A )
+        self.A_wish = A
+        self.B_wish = B
+        self.A = self.Sample( A.tags.all(), B.tags.all() )
+        self.B = self.Sample( B.tags.all(), A.tags.all() )
 
     def all( self ):
         """
@@ -121,21 +118,40 @@ class Pair:
                len(self.all())
 
     def mountford_similarity( self ):
-
-        print len(self.common())
-        print len(self.A),len(self.B)
-
+        result = 0.0
         numerator = 2.0 * len(self.common())
         denominator = 2.0 * len(self.A) * len(self.B) \
                       - (
                             ( len(self.A) + len(self.B) ) * len( self.common() )
                         )
+        try:
+            result = numerator / denominator
+        except ZeroDivisionError:
+            result = 0.0
 
-        return numerator / denominator
+        return result
 
 if __name__ == "__main__":
     a = set(["z", "x", "c"])
     b = set(["z", "x", "d", "e"])
+
+    from string import ascii_lowercase
+
+#    with open( "results.csv", "w" ) as results:
+#        for x in xrange(0, len(ascii_lowercase) -1):
+#            p = Pair( set(ascii_lowercase[0]), set(ascii_lowercase[0:x]) )
+#
+#            results.write(
+#                "%f,%f,%f,%f \n" % (
+#                    p.sorensen_similarity(),
+#                    p.tversky_similarity( alpha=1.0, beta=1.0 ),
+#                    p.jaccard_similarity(),
+#                    p.mountford_similarity()
+#                )
+#            )
+
+
+
 
     c = Pair( a,b )
 
