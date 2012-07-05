@@ -3,6 +3,7 @@
     The unifi API
 """
 from mvp.models import Student, Oracle, Wish, Tag, Group
+from usermanagement import UserManagement
 
 class GroupManagement:
     """
@@ -10,9 +11,9 @@ class GroupManagement:
     """
 
     def __init__(self):
-        pass
+        self.user_management = UserManagement()
 
-    def addgroup(self, tags=[], students=[], oracle=None):
+    def addGroup(self, tags=[], students=[], oracle=None):
         """
             Create a new group
             @param tags: the group tags
@@ -26,14 +27,15 @@ class GroupManagement:
             group.tags.add(tag)
 
         for student in students:
-            group.students.add(student)
+            if not student == None:
+                group.students.add(student)
 
         if not oracle == None:
             group.oracle = oracle
 
         return group
 
-    def setoracle(self, oracle, group):
+    def setOracle(self, oracle, group):
         """
             Assign an oracle to this group
             @param oracle: the oracle
@@ -44,7 +46,7 @@ class GroupManagement:
         except:
             pass
 
-    def getoracle(self, group):
+    def getOracle(self, group):
         """
             Get a groups oracle
             @param group: the group
@@ -53,7 +55,7 @@ class GroupManagement:
 
         return group.oracle
 
-    def getstudents(self, group):
+    def getStudents(self, group):
         """
             Get the students on a group
             @param group: the group
@@ -62,7 +64,7 @@ class GroupManagement:
 
         return group.students
 
-    def gettags(self, group):
+    def getTags(self, group):
         """
             Get the tags on a group
             @param group: the group
@@ -71,7 +73,22 @@ class GroupManagement:
 
         return group.tags
 
-    def flushgroups(self):
+    def getGroups(self, student):
+        """
+            Get all groups that a student is part of
+            @param student: the student
+            @return: a set of groups
+        """
+
+        #if student is a string, get the student object
+        student = self.user_management.getStudent(student)
+        print student
+        groups = []
+
+        return [group for group in Group.objects.all() if student in group.students.all()]
+
+
+    def flushGroups(self):
         """
             Delete all group objects
         """

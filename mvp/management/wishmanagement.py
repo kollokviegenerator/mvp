@@ -4,6 +4,8 @@
 """
 from mvp.models import Wish, Student, Tag
 from django.contrib.auth.models import User
+from usermanagement import UserManagement
+
 
 class WishManagement:
     """
@@ -11,12 +13,12 @@ class WishManagement:
     """
 
     def __init__(self):
-        pass
+        self.user_management = UserManagement()
 
-    def addwish(self, student, tags):
+    def addWish(self, student, tags):
         """
             Add a user
-            @param student: the student's username thats register a wish
+            @param student: the student's thats register a wish
             @param tags: wish tags
         """
 
@@ -24,42 +26,37 @@ class WishManagement:
             print "Please specify at least one tag"
             return
 
-        student = student.strip()
+        if student.__class__ == str:
+            student = student.strip()
+            student = self.user_management.getStudent(student)
+
         w = self.getWish(student, tags)
 
         if w != None:
             print "Wish for: %s exist" % student
             return w
 
-        try:
-            s = Student.objects.get(user=User.objects.get(username=student))
+        w = Wish()
+        w.student=student
+        w.save()
 
-            w = Wish()
-            w.student=s
-            w.save()
-            for t in tags:
-                try:
-                    t = Tag.objects.get_or_create(name_of_tag=t)
-                    w.tags.add(t[0])
-                except Tag.DoesNotExist:
-                    print "Tag %s does not exist" % t
+        for t in tags:
+            try:
+                t = Tag.objects.get_or_create(name_of_tag=t)
+                w.tags.add(t[0])
+            except Tag.DoesNotExist:
+                print "Tag %s does not exist" % t
 
-            print "Wish added for user %s" % student
-        except Student.DoesNotExist: #Can't find student
-            print "User '%s' is not registered as a student" % student
-        except User.DoesNotExist: #Can't even find the user
-            print "Student '%s' does not exists in database." % student
+        print "Wish added for user %s" % student
 
-        #Return the created wish
         return w
 
-    def deletewish(self, wish):
+    def deleteWish(self, wish):
         """
             Delete a wish
         """
 
         wish.delete()
-
 
     def getWish(self, student, tags):
         """
@@ -68,18 +65,19 @@ class WishManagement:
             @param tags: a list with tag names
         """
 
-        try:
-            s = Student.objects.get(user=User.objects.get(username=student))
-            wishes = Wish.objects.filter(student=s)
+        if student.__class__ == str:
+            student = self.user_management.getStudent(student)
 
-            for w in wishes:
-                wishtags = [t.name_of_tag for t in w.tags.all()]
+        wishes = Wish.objects.filter(student=student)
 
-                if set (wishtags) == set (tags):
-                    return w
+        for w in wishes:
+            wishtags = [t.name_of_tag for t in w.tags.all()]
 
-        except Student.DoesNotExist:
-            return None
+            if set (wishtags) == set (tags):
+                return w
+
+        #If wish found
+        return None
 
     def flush(self):
         """

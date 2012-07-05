@@ -13,7 +13,7 @@ class UserManagement:
     def __init__(self):
         pass
 
-    def adduser(self, usr):
+    def addUser(self, usr):
         """
             Add a user
             @param usr: the user to be added
@@ -33,7 +33,7 @@ class UserManagement:
 
         return u
 
-    def getuser(self, usr):
+    def getUser(self, usr):
         """
             Get the user with username usr
             @param usr: the username
@@ -46,33 +46,31 @@ class UserManagement:
         except User.DoesNotExist:
             return None
 
-    def getstudent(self, usr):
+    def getStudent(self, usr):
         """
             Get the student with username usr
             @param usr: the username
             @return: the student, or None if no student exists
         """
 
-        usr = usr.strip() #remove whitespace
         try:
-            return Student.objects.get(user=self.getuser(usr))
+            return Student.objects.get(user=self.getUser(usr))
         except:
             return None
 
-    def getoracle(self, usr):
+    def getOracle(self, usr):
         """
             Get the oracle with username usr
             @param usr: the username
             @return: the oracle, or None if no oracle exists
         """
 
-        usr = usr.strip() #remove whitespace
         try:
-            return Oracle.objects.get(user=self.getuser(usr))
+            return Oracle.objects.get(user=self.getUser(usr))
         except:
             return None
 
-    def deleteuser(self, usr):
+    def deleteUser(self, usr):
         """
             Delete a user (or rather, set the is_active flag to False so
             any foreign keys to users won't break
@@ -88,7 +86,7 @@ class UserManagement:
         except User.DoesNotExist:
             print "User '%s' does not exists in database." % usr
 
-    def updateuser(self, usr, arg):
+    def updateUser(self, usr, arg):
         """
             Update an user
             @param usr: the user(name) to update

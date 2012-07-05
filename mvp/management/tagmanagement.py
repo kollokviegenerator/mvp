@@ -11,7 +11,7 @@ class TagManagement:
     def __init__(self):
         pass
 
-    def addtag(self, tag):
+    def addTag(self, tag):
         """
             Add a user
             @param usr: the user to be added
@@ -21,7 +21,7 @@ class TagManagement:
         print "tag '%s' added!" % tag
         return t
 
-    def deletetag(self, tag):
+    def deleteTag(self, tag):
         """
             Delete a tag (or rather, set the is_active flag to False so
             any foreign keys to users won't break
@@ -34,8 +34,8 @@ class TagManagement:
 
     def getTag(self, name):
         """
-        return a tag
-        @param name: the name of the tag
+            Return a tag
+            @param name: the name of the tag
         """
 
         try:
