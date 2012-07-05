@@ -8,7 +8,7 @@ class Pool:
     """
     Ordering of pairs given by their index
 
-    @param wishes               the list of wishes with at least one tag in each
+    @param wishes    the list of wishes with at least one tag in each
     """
     def __init__( self, wishes ):
         self.wishes = wishes
@@ -17,6 +17,8 @@ class Pool:
         """
         @return     a list of pairs ordered by their quality index (score)
         """
+        pairs = []
+
         pairs = ( Pair( p[0], p[1] ) for p in combinations( self.wishes, 2 ) )
         return pairs
 
@@ -24,7 +26,9 @@ class Pool:
 
 
 class Pair:
-
+    """
+    Temporary Pair-container for algorithm development.
+    """
     class Sample:
         def __init__( self, this, other ):
             self.this = set(this)
@@ -68,7 +72,7 @@ class Pair:
 
     def all( self ):
         """
-        @return     union av self.A and self.B
+        @return     union
         """
         return ( self.A() | self.B() )
 
