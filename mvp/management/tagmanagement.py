@@ -4,11 +4,13 @@
 """
 from mvp.models import Tag
 
+
 class TagManagement:
     """
         Takes care of tag management (adding, removing, getting ...)
     """
     def __init__(self):
+
         pass
 
     def addTag(self, tag):
@@ -42,6 +44,18 @@ class TagManagement:
             return Tag.objects.get(name_of_tag=name)
         except Tag.DoesNotExist:
             return None
+
+    def getStudentsWithTag(self, tag):
+        """
+            TODO
+            Get all students with a given tag
+            @param tag: the tag
+        """
+        from mvp.management.wishmanagement import WishManagement
+        self.wish_management = WishManagement()
+
+        wishes = self.wish_management.getAllWishesWithTag(tag)
+        return [w.student for w in wishes]
 
     def flush(self):
         """

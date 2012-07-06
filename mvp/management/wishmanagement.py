@@ -5,7 +5,7 @@
 from mvp.models import Wish, Student, Tag
 from django.contrib.auth.models import User
 from usermanagement import UserManagement
-
+from tagmanagement import TagManagement
 
 class WishManagement:
     """
@@ -14,6 +14,7 @@ class WishManagement:
 
     def __init__(self):
         self.user_management = UserManagement()
+        self.tag_management = TagManagement()
 
     def addWish(self, student, tags):
         """
@@ -78,6 +79,33 @@ class WishManagement:
 
         #If wish found
         return None
+
+    def getAStudentWishes(self, student):
+        """
+            Get all the wishes for a given student
+            @param student: the student
+            @return: list of wishes
+        """
+
+        if student.__class__ == str:
+            student = self.user_management.getStudent(student)
+
+        return Wish.objects.filter(student=student)
+
+    def getAllWishesWithTag(self, tag):
+        """
+            Get all wishes with a given tag
+            @param tag: the tag
+            @return: a list of wishes
+        """
+
+        if tag.__class__ == str:
+            tag = self.tag_management.getTag(tag)
+
+        if tag == None:
+            return []
+
+        return [wish for wish in Wish.objects.all() for t in wish.tags.all() if t == tag]
 
     def flush(self):
         """
