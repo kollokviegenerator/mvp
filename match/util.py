@@ -4,6 +4,11 @@ from __future__ import division
 from itertools import combinations
 from math import sqrt
 
+from mvp.management import \
+    tagmanagement, wishmanagement, usermanagement, groupmanagement
+
+from mvp.models import *
+
 class Pool:
     """
     Ordering of pairs given by their index
@@ -13,14 +18,44 @@ class Pool:
     def __init__( self, wishes ):
         self.wishes = wishes
 
-    def pair( self ):
+    def pair( self, limit = 0.5 ):
         """
         @return     a list of pairs ordered by their quality index (score)
         """
-        pairs = []
+        for p in self.active_pairs():
+            score = p.sorensen_similarity()
+            if score >= limit:
+                yield ( score, p, p.wish_A.student, p.wish_B.student )
 
-        pairs = ( Pair( p[0], p[1] ) for p in combinations( self.wishes, 2 ) )
-        return pairs
+
+
+    def active_pairs( self ):
+        for pair in combinations( self.active_wishes(), 2 ):
+            yield Pair( pair[0], pair[1] )
+
+    def active_wishes( self ):
+        active_wishes = []
+        for w in self.wishes:
+            for t in self.active_tags():
+                wish_tags = w.tags.all()
+                if t in wish_tags:
+                    active_wishes.append(w)
+
+        return set(active_wishes)
+
+
+    def active_tags( self ):
+        """
+        @return     a list of active tags
+        """
+
+        tags_in_wishes = set()
+
+        for w in self.wishes:
+            for t in w.tags.all():
+                tags_in_wishes.add( t )
+
+        return tags_in_wishes
 
 
 
@@ -136,47 +171,4 @@ class Pair:
         return result
 
 if __name__ == "__main__":
-    a = set(["z", "x", "c"])
-    b = set(["z", "x", "d", "e"])
-
-    from string import ascii_lowercase
-
-#    with open( "results.csv", "w" ) as results:
-#        for x in xrange(0, len(ascii_lowercase) -1):
-#            p = Pair( set(ascii_lowercase[0]), set(ascii_lowercase[0:x]) )
-#
-#            results.write(
-#                "%f,%f,%f,%f \n" % (
-#                    p.sorensen_similarity(),
-#                    p.tversky_similarity( alpha=1.0, beta=1.0 ),
-#                    p.jaccard_similarity(),
-#                    p.mountford_similarity()
-#                )
-#            )
-
-
-
-
-    c = Pair( a,b )
-
-    out = [
-        "Elements missing in A",
-        c.A.complement(),
-        "Elements missing in B",
-        c.B.complement(),
-        "Distance from A -> B",
-        c.distance( insertion_cost=2, deletion_cost=1 ),
-        "Distance from B -> A",
-        c.inverse_distance( insertion_cost=2, deletion_cost=1 ),
-        "Sorensen index",
-        c.sorensen_similarity(),
-        "Tversky index",
-        c.tversky_similarity(),
-        "Jaccard index",
-        c.jaccard_similarity(),
-        "Mountford index",
-        c.mountford_similarity()
-    ]
-
-    for line in out:
-        print line.__str__()
+    pass

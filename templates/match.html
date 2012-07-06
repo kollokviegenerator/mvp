@@ -1,10 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% include "header.html" %}
 
-</body>
-</html>
+<h2>Response: {{ title }}</h2>
+{{ message }}
+
+<ul>
+    {% for pair in matches %}
+    <li>
+        <h2>{{ pair.0 }}</h2>
+        <div class="student">{{ pair.2 }}</div>
+        <div class="student">{{ pair.3 }}</div>
+        <hr />
+        <div>Common tags:</div>
+        <div class="tag_container">
+            {% for tag in pair.1.common %}
+                <div class="tag">{{ tag }}</div>
+            {% endfor %}
+        </div>
+        <div>Uncommon tags:</div>
+        <div class="tag_container">
+            {% for tag in pair.1.uncommon %}
+                <div class="tag">{{ tag }}</div>
+            {% endfor %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% include "footer.html" %}

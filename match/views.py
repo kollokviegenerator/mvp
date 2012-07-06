@@ -13,18 +13,12 @@ def match( request ):
 
     wishes = Wish.objects.all()
     pool = Pool( wishes )
-    result = sorted(
-        [ (x.jaccard_similarity(), x.wish_A, x.wish_B)
-            for x in pool.pair()
-            if x.jaccard_similarity() > 0.5
-        ],
-        key=lambda a: a[0]
-    )
+    pairs = sorted( list(pool.pair() ), key=lambda x: x[0] )
 
-    return render_to_response( "dialog.html", {
-            "title": "Test",
-            "message": pool,
-            "set": result
+    return render_to_response( "match.html", {
+            "title":    "Matching",
+            "message":  "Displaying %d pairs" % len(pairs),
+            "matches":  pairs
         },
         context_instance = RequestContext( request )
     )

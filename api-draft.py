@@ -23,8 +23,23 @@ class apidraft:
         """
         try:
             opts, args = getopt.getopt(argv[1:],
-                    "hu:g:t:w:", ["help", "adduser=", "du=", "uu=", "updateuser=", "deleteuser=", 
-                        "flushusers", "addtag=", "flushtags", "addwish=", "flushwishes"])
+                "hu:g:t:w:",
+                [
+                    "help",
+                    "adduser=",
+                    "du=",
+                    "uu=",
+                    "updateuser=",
+                    "deleteuser=",
+                    "flushusers",
+                    "addtag=",
+                    "flushtags",
+                    "addwish=",
+                    "flushwishes",
+                    "populate",
+                    "test"
+                ]
+            )
         except getopt.GetoptError, err:
             # print help information and exit:
             print str(err) # will print something like "option -f not recognized"
@@ -40,6 +55,7 @@ class apidraft:
             if o in ("-h", "--help"):
                 self.usage()
                 sys.exit()
+
             elif o in ("-u", "--adduser"):
                 self.adduser(a)
             elif o in ("-g", "--addgroup"):
@@ -58,6 +74,7 @@ class apidraft:
                 self.addwish(a, args)
             elif o in ("--flushwishes"):
                 self.wish_management.flush()
+
             else:
                 assert False, "unhandled option"
 
@@ -142,6 +159,13 @@ class apidraft:
             #Argument is a single user
             self.wish_management.addWish(student, tags)
 
+
+    def match(self):
+        pass
+
+    def populate(self):
+        pass
+
     def usage(self):
         """
         Print usage
@@ -150,7 +174,8 @@ class apidraft:
         print "Usage: %s [subcommand] [args] \n" % sys.argv[0]
         print "Help:"
         print "    -h --help\tto show this help and exit\n"
-        print "Type '%s [subcommand] -h, --help for help on a specific subcommand (not impl. yet)\n"
+        print "Type '%s [subcommand] -h, --help for help on a specific" + \
+              "subcommand (not impl. yet)\n"
         print "Available subcommands"
 
         print "[User]"
@@ -186,10 +211,10 @@ if __name__ == "__main__":
     import os
     os.environ['DJANGO_SETTINGS_MODULE'] = 'kgen.settings'
 
-    from mvp.management.usermanagement import UserManagement
-    from mvp.management.tagmanagement import TagManagement
+    from mvp.management.usermanagement  import UserManagement
+    from mvp.management.tagmanagement   import TagManagement
     from mvp.management.groupmanagement import GroupManagement
-    from mvp.management.wishmanagement import WishManagement
+    from mvp.management.wishmanagement  import WishManagement
 
     apidraft = apidraft()
     apidraft.main(sys.argv)
