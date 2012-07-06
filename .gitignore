@@ -1,5 +1,6 @@
 kgen/settings.py
 mvp/migrations/
+communications/migrations/
 static/
 .DS_Store
 *.pyc
