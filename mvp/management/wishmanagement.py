@@ -77,7 +77,7 @@ class WishManagement:
             if set (wishtags) == set (tags):
                 return w
 
-        #If wish found
+        #If no wish found
         return None
 
     def getAStudentWishes(self, student):
