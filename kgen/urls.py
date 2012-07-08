@@ -19,4 +19,6 @@ urlpatterns = patterns('',
     url( r'^test/intrude/([a-z]{1,10})',    'mvp.views.intrude' ),
     # other project applications
     url( r'^match/',                include('match.urls')),
+
+    url(r'^groups/',                  'mvp.views.group'),
 )

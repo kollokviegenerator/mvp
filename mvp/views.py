@@ -6,7 +6,7 @@ from django.core.context_processors import csrf
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import auth
-from mvp.models import Wish, Student, Tag
+from mvp.models import Wish, Student, Tag, Group
 
 import match
 
@@ -169,3 +169,13 @@ def flush_wishes( request ):
         },
         context_instance = RequestContext( request )
     )
+
+def group(request):
+
+    g = Group.objects.all()
+
+    return render_to_response("groups.html", {"title": "All available groups",
+        "groups": g},
+        context_instance = RequestContext(request))
+
+
